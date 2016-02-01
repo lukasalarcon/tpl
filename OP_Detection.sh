@@ -49,11 +49,18 @@ else
         DistroBasedOn=`lowercase $DistroBasedOn`
         echo $OS
         echo $DIST
-        readonly DistroBasedOn
-        readonly PSUEDONAME
-        readonly REV
-        readonly KERNEL
-        readonly MACH
+        echo $DistroBasedOn
+        echo $PSUEDONAME
+        echo $REV
+        echo $KERNEL
+		readonly MACH
     fi
 
 fi
+
+	if [ "$DIST" == "CentOS" ]
+	then
+	echo "Good Operating System Detected"
+	else
+	echo "NO good Operating System Detected"
+	fi
