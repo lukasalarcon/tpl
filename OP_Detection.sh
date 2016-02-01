@@ -47,10 +47,10 @@ else
         fi
         OS=`lowercase $OS`
         DistroBasedOn=`lowercase $DistroBasedOn`
-        echo $OS
-        echo $DIST
-        echo $DistroBasedOn
-        echo $PSUEDONAME
+        #echo $OS
+        # echo $DIST
+        #echo $DistroBasedOn
+        #echo $PSUEDONAME
         echo $REV
         echo $KERNEL
 		readonly MACH
@@ -61,6 +61,7 @@ fi
 	if [ "$DIST" == "CentOS" ]
 	then
 	echo "Good Operating System Detected"
+        sh ./CentOSRedHat.sh	
 	else
 	echo "NO good Operating System Detected"
 	fi

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 
 #create a secondlook user
 
@@ -10,7 +10,11 @@
 
 #sudo yum install https://dl.fedoraproject.org/pub/epel/epel.release.latest.7.noarch.rpm
 
-if [ [ $REV == *[6.]* ] ]
+
+#REV=$(sh ./OP_Detection.sh | head -n 1)
+REV=${args[0]}
+
+if [[  "$REV" == *"6."* ]]
 	then
 		#FOLLOW 6.x INSTRUCTIONS
 		echo "6.x"
