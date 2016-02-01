@@ -1,7 +1,34 @@
 #!/bin/bash
-#set -x
+set -x
 
-SHOME="/home/admin"
+SHOME="/root"
+
+#INSTALL TLP PROCESS
+
+installTPL ()
+{
+
+echo "INSTALL TPL"
+
+echo "Please, choose your options for this Threat Protection for Linux:"
+        echo "1) Install Install StandAlone and Ansible"
+        echo "2) Install Install StandAlone, Ansible and Repo"
+        read wcgmode
+        if [ "$wcgmode" == "1" ]
+         then
+           echo "Installing...TPL and Ansible"
+	 #CALL INSTALLER
+        else
+           echo "installing...TPL, Ansible & Repo"
+	 #CALL INSTALLER
+        fi
+}
+
+
+
+
+
+
 
 change_eth0 ()
 {
@@ -271,22 +298,13 @@ main ()
 {
 clear
 echo ""
-figlet THREAT PROTECTION 
+echo "THREAT PROTECTION FOR LINUX EASY SETUP" 
 
 echo ""
 
    
-ready=`head -1 $SHOME/scripts/.ready.txt`
 
-if [ $ready =  1 ]; then
-    
-   #
-   #ADDING MENU HERE CAUSES UNINSTALLING WCG TO STOP AND FREEZE!
-   # Automatically scripting will remove and add this line..
-   #./themenu.sh
-   exit 1    
 
-fi
 
 
 #echo "This script is used to set static hostname and IP address, press enter if you want to set default value"
@@ -302,10 +320,11 @@ while [ "$ans" == "N" -o "$ans" == "n" ]
 do
         #clear
         echo ""
-        echo "This script is used to set static hostname and IP address [eth0] or [eth1] or both"
-	echo "Please, enter the following options for networking"
+        echo "This script is used to set static hostname and IP address"
+	echo "Please, enter the following options for management networking"
 	echo "1) eth0 only"
 	echo "2) eth0 and eth1"
+	echo "3) skip network settings and start setup"
 	echo "Enter your option:" 
         read Interth
         echo ""
@@ -314,18 +333,23 @@ do
 
 	1) change_eth0 
 	   enter_gateway
-	   #enter_routes	
+	   #enter_routes
+	   setIpHostname
+	   acceptInput
 	   ;;
 	2) 
            change_eth0
            change_ethX
 	   enter_gateway
-	   #enter_routes	
+	   #enter_routes
+	   setIpHostname
+	   acceptInput
 	   ;;
+	3)
+	   #CALL INSTALLING PROCESS	
+	   installTPL		
+	   ;;	
         esac 
-
-
-        acceptInput
 done
 
 if [ "$ans" == "Y" -o "$ans" == "y" ]
@@ -338,36 +362,15 @@ then
         cp /etc/sysconfig/network-scripts/ifcfg-eth0 $SHOME/backups
 	cp /etc/ntp.conf $SHOME/backups
 
-	setIpHostname
-
-        #{
-        #echo "## Following line is added by ISV"
-        #echo "cp /root/hosts /etc/hosts"
-        #echo "cp /root/resolv.conf /etc/resolv.conf"
-        #echo "cp /root/network /etc/sysconfig/network"
-        #echo "cp /root/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0"
-        #} >> /etc/rc.local
+	#setIpHostname
 
 
-        echo "OK DONE ...Restarting Networking Services"
-	service network restart
-        echo "----------------------------------------------"        
+        #echo "OK DONE ...Restarting Networking Services"
+	#service network restart
+        #echo "----------------------------------------------"        
 
-	echo "Please, choose your options for this Threat Protection for Linux:"
-	echo "1) Install Install StandAlone and Ansible"
-        echo "2) Install Install StandAlone, Ansible and Repo"
-	read wcgmode
-        if [ "$wcgmode" == "1" ]
-         then
-	   echo "Installing...TPL and Ansible"	
-           stallWWS
-	   stallWCG	
-        else
-	   echo "installing...TPL, Ansible & Repo"	
-           installWCG
-        fi
 	
-	installCron
+	#installCron
 
        # Patching
 
@@ -393,7 +396,6 @@ then
                 chkconfig iptables off 
 
 	fi
-	echo 1 > $SHOME/scripts/.ready.txt
 	service ntpd restart
 	service iptables restart
 	hostname $hostname
