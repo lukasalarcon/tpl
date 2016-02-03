@@ -13,10 +13,10 @@ for line in $(cat tmpp/TPL.txt);
    if  [[ $line == *#* ]]  
     then
      echo "Applying "$line;
-     truktor=$line;
+     Dwn=$(echo $line| sed 's/#//');
     else
      echo "Downloading....";
-      wget --content-disposition $line -P $tmpp;
+      wget -O $tmpp/$Dwn --content-disposition $line -P $tmpp;
    fi
  done
 #rm -fR $tmpp;
