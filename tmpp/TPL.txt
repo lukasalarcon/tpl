@@ -1,6 +1,0 @@
-#secondlook-5.0.0_r56689-EL6.x86_64.rpm
-https://www.dropbox.com/s/ktxto0ig5fu73z4/secondlook-5.0.0_r56689-EL6.x86_64.rpm
-#secondlook-phscripts-5.0.0-r56689.tar.gz
-https://www.dropbox.com/s/7jjqoibajdib1e4/secondlook-phscripts-5.0.0-r56689.tar.gz
-#secondlook-agent_1.6.0-r56689.tar.gz
-https://www.dropbox.com/s/t0otmhcqdxxgtfx/secondlook-agent_1.6.0-r56689.tar.gz
