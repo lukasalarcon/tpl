@@ -33,9 +33,26 @@ case $cronOp in
 	;;
 	
 	4)
-	
-	crontab -l > file; echo '5 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
+	#EACH 1 hour
+	crontab -l > file; echo '59 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 
 	;;
+	
+	5)
+	#EACH day
+	crontab -l > file; echo '* */12 * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
+
+	;;
+	
+	6)
+	#EACH day
+	crontab -l > file; echo '59 23 * * * for target in `cat /etc/targets`; do echo "$((RANDOM \% 60)) $((RANDOM \% 24)) * * * secondlook-scan' >> file; sudo crontab -u secondlook file
+	
+	;;
+	
+	
+	
+	
+	
 	
 esac
