@@ -8,6 +8,23 @@ CRONITI=CronOptions.sh
 DWL=Get_TPL.sh
 # END GLOBAL VARIABLES ####
 
+function PackagesNeed () {
+#VALIDATES IF PACKAGES EXISTS
+# yum
+# ssh-agent
+# sed
+
+
+
+
+
+
+}
+
+
+
+
+
 
 function AddUser (){
 
@@ -122,12 +139,6 @@ sh ./$CRONITI
 #END Cronitizate 
 }
 
-function Debug(){
-#PENDING
-
-
-
-}
 #
 #MAIN BODY
 
