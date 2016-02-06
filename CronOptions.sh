@@ -1,4 +1,7 @@
 #!/bin/bash
+#DEBUG
+set -x
+#
 
 #ADD CRONTAB ENTRIES FOR SECONDLOOK SCAN
 echo "Choose from the following scanning options:"
@@ -10,18 +13,18 @@ echo "5)Once a day"
 echo "6)Random"
 echo "Please, chooose what you prefer:"
 
-read cropOp
+read cronOp
 
-case $cronOp in
+case "$cronOp" in
 
-	1) 
-	 #EACH 5
-	 
+	
+	1)
+	 #EACH 5 min		
 	 crontab -l > file; echo '5 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 	;;
 
 	2)
-	 #EACH 15
+	 #EACH 15 min
 	crontab -l > file; echo '15 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 
 	;;

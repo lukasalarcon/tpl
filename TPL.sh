@@ -1,4 +1,9 @@
 ##INSTALL###
+
+#DEBUG SCRIPT
+set -x
+#
+
 #
 ##GLOBAL VARIABLES
 REPODROP=tmpp
@@ -13,12 +18,25 @@ function PackagesNeed () {
 # yum
 # ssh-agent
 # sed
+_yum=$(rpm -qa | grep yum| head -1)
+_sed=$(rpm -qa | grep sed)
+_sshk=$()
+
+if [[ "$_yum" == "yum"* ]]
+	then 
+		echo "Packager YUM 		[OK]"
+	else
+		echo "Please, you need to install yum packager."
+		exit 1
+fi
 
 
 
 
 
 
+
+#END PACKAGES
 }
 
 
@@ -71,7 +89,7 @@ function GenerateKey (){
 #ADD A KEY GEN WITH NO PROMTPS
 #CREATE SSH DIR INTO SECONDLOOK HOME
 mkdir $HOMEUSER/.ssh
-sh-keygen -f $HOMEUSER/.ssh/id_rsa -t rsa -N ''
+ssh-keygen -f $HOMEUSER/.ssh/id_rsa -t rsa -N ''
 
 #COPY KEYGEN KEY
 cp /usr/share/secondlook/ssh_config $HOMEUSER/.ssh/config
@@ -142,10 +160,13 @@ sh ./$CRONITI
 #
 #MAIN BODY
 
-	AddRepo
-		DownloadP
-			installRPM 
-				GenerateKey
+
+	PackagesNeed
+		#AddRepo
+		#	DownloadP
+			#	InstallRPM 
+					AddUser
+					GenerateKey
 				AddKeyProduct
 			RateLimiting 
 		Cronitizate
