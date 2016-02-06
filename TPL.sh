@@ -5,6 +5,7 @@ REPODROP=tmpp
 PACKAGE_FILENAME=secondlook-5.0.0_r56689-EL7.x86_64.rpm
 HOMEUSER=/home/secondlook
 CRONITI=CronOptions.sh
+DWL=Get_TPL.sh
 # END GLOBAL VARIABLES ####
 
 
@@ -26,6 +27,20 @@ sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noa
 
 
 }
+
+function DownloadP () {
+#Download Sources from DropBox
+
+sh ./$DWL
+
+
+
+}
+
+
+
+
+
 
 function InstallRPM (){ 
 
@@ -113,6 +128,16 @@ function Debug(){
 
 
 }
+#
+#MAIN BODY
+
+	AddRepo
+		DownloadP
+			installRPM 
+				GenerateKey
+				AddKeyProduct
+			RateLimiting 
+		Cronitizate
 
 #END FILE
 
