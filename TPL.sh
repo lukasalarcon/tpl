@@ -79,7 +79,7 @@ sh ./$DWL
 
 function InstallRPM (){ 
 
-#INSTALL PACKAGE
+#INSTALL PACKAGE FOR CENTOS 
 sudo yum install $REPODROP/$PACKAGE_FILENAME
 
 }
@@ -156,6 +156,21 @@ sh ./$CRONITI
 
 #END Cronitizate 
 }
+
+
+function CreateTargets () {
+#CREATE SCAN TARGETS FOR SECONDLOOK
+#POSIBLE REPO FOR ANSIBLE TOO
+
+
+
+}
+
+
+
+
+
+
 
 #
 #MAIN BODY
