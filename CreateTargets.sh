@@ -13,7 +13,7 @@ echo "Please, enter Scan Targets"
 echo "1) Enter Single IPv4 Address (10.0.0.1)"
 echo "2) Enter CIRD v4 (10.0.0.0/16)"
 echo "3) Enter File with CIDR Ranges"
-echo "4) Print Ranges"
+echo "4) Show Ranges"
 echo "5) Apply Ranges to Scan Targets"
 echo "6) Exit Scan Targets"
 
@@ -45,12 +45,17 @@ do
 	   read CIRD
 	   _CIRD=$(./$CIDR_PROGRAM $CIRD)
 	   #./$CIDR_PROGRAM $CIRD 
-	   GLOBALTARGETS="$GLOBALTARGETS$_CIRD"
+	   GLOBALTARGETS="$GLOBALTARGETS$_CIRD\n"
 	;;
 	3) 
  	   echo "Enter the path to file:"	
-	   read _FILE		
-           $GLOBALTARGETS=$(./$CIDR_PROGRAM $_FILE)
+	   read _FILE
+	   if [ -f $_FILE ]
+           then			
+            $GLOBALTARGETS=$(./$CIDR_PROGRAM -i $_FILE)
+	   else
+	    echo "File $_FILE does not exists!"
+           fi		
 	;;
 
 	4) 
@@ -59,8 +64,17 @@ do
 	;;
 	5)
 	   #APPEND
-		echo -e "$GLOBALTARGETS" >> targets.txt
-
+	   echo "Would you like to create a new file?(y/n):"
+		read ANS
+		if [ "$ANS" == "y" -o "$ANS" == "Y"  ]
+                   then
+		     echo "Creating a new Target File..."
+		     rm -f $TARGET_FILE	
+		     echo -e "$GLOBALTARGETS" > $TARGET_FILE
+		   else
+		     echo "Append content to existing target file..."	
+		     echo -e "$GLOBALTARGETS" >> $TARGET_FILE
+		fi
         ;;
 
 	6)

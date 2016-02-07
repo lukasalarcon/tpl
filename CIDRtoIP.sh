@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#set -x
 ############################                                                                                                                                                                                                                                             
 
 prefix_to_bit_netmask() {
