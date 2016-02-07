@@ -34,18 +34,23 @@ do
    case $ScanOp in
 
 	1) 
+	   #ENTER ONE IP 
 	   echo "Enter a Single IP:"	
 	   read SingleIP
 	   GLOBALTARGETS="$GLOBALTARGETS\n$SingleIP"	
 	;;
 	2) 
+	   #ENTER A NETWORK RANGE 
 	   echo "Enter a CIRD:"	
 	   read CIRD
-	   _CIRD=$(./$CIRD_PROGRAM $CIRD)
-	   $GLOBALTARGETS=$GLOBALTARGETS$CIRD
+	   _CIRD=$(./$CIDR_PROGRAM $CIRD)
+	   #./$CIDR_PROGRAM $CIRD 
+	   GLOBALTARGETS="$GLOBALTARGETS$_CIRD"
 	;;
-	3) read _FILE		
-           $GLOBALTARGETS=$(./$CIRD_PROGRAM $_FILE)
+	3) 
+ 	   echo "Enter the path to file:"	
+	   read _FILE		
+           $GLOBALTARGETS=$(./$CIDR_PROGRAM $_FILE)
 	;;
 
 	4) 
