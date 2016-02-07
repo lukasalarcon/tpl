@@ -11,6 +11,7 @@ PACKAGE_FILENAME=secondlook-5.0.0_r56689-EL7.x86_64.rpm
 HOMEUSER=/home/secondlook
 CRONITI=CronOptions.sh
 DWL=Get_TPL.sh
+CREATETGS=CreateTargets.sh
 # END GLOBAL VARIABLES ####
 
 function PackagesNeed () {
@@ -161,9 +162,9 @@ sh ./$CRONITI
 function CreateTargets () {
 #CREATE SCAN TARGETS FOR SECONDLOOK
 #POSIBLE REPO FOR ANSIBLE TOO
+./$CREATETGS
 
-
-
+#END CreateTargets
 }
 
 
@@ -182,8 +183,9 @@ function CreateTargets () {
 			#	InstallRPM 
 					AddUser
 					GenerateKey
-				AddKeyProduct
-			RateLimiting 
+					AddKeyProduct
+				RateLimiting
+			CreateTargets 
 		Cronitizate
 
 #END FILE
