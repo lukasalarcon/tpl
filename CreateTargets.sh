@@ -69,8 +69,10 @@ do
 		if [ "$ANS" == "y" -o "$ANS" == "Y"  ]
                    then
 		     echo "Creating a new Target File..."
-		     rm -f $TARGET_FILE	
+		     rm -f $TARGET_FILE
 		     echo -e "$GLOBALTARGETS" > $TARGET_FILE
+		     sed '/^$/d' $TARGET_FILE >> tmp.txt
+		     mv tmp.txt $TARGET_FILE	
 		   else
 		     echo "Append content to existing target file..."	
 		     echo -e "$GLOBALTARGETS" >> $TARGET_FILE
