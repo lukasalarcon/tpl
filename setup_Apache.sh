@@ -6,6 +6,8 @@ set -x
 ##GLOBAL VARs
 WSGI=/usr/share/secondlook/wsgi/slweb.conf
 APA=/etc/httpd/conf.d/
+CERTS=/etc/httpd/ssl
+
 #
 #END GLOBAL VARS
 
@@ -136,8 +138,11 @@ sudo mkdir /etc/httpd/ssl
 
 #CREATE CERTIFICATE
 
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/apache.key -out /etc/httpd/ssl/apache.crt
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/apache_sl.key -out /etc/httpd/ssl/apache_sl.crt
 
+#REWRITE CERTS TO APACHE SSL
+yes | cp -rf $CERTS/apache_sl.key /etc/pki/tls/certs/localhost.crt
+yes | cp -rf $CERTS/apache_sl.crt /etc/pki/tls/private/localhost.key
 
 
 
@@ -147,8 +152,16 @@ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/
 
 #function ModifyApacheServer () {
 #MODIFY ROUTEINES FOR APACHE
+#USING SED FOR APPEND LINES FOR APACHE TO SLWEB
+sed -i '/Require all granted/a \
+	AuthType Basic \
+	AuthName "Restricted Content" \
+	AuthUserFile \/etc\/httpd\/conf.d\/.htpasswd \
+	Require valid-user' slwebtest.conf
 
 
+#CHANGE THE REQUIRED ALL ACCESS TO COMMENT
+sed -i '/Required all granted/#Required all granted/' slwebtest.conf
 
 
 #}
