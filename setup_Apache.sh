@@ -157,16 +157,26 @@ sed -i '/Require all granted/a \
 	AuthType Basic \
 	AuthName "Restricted Content" \
 	AuthUserFile \/etc\/httpd\/conf.d\/.htpasswd \
-	Require valid-user' slwebtest.conf
+	Require valid-user' $APAslweb.conf
 
 
 #CHANGE THE REQUIRED ALL ACCESS TO COMMENT
-sed -i '/Required all granted/#Required all granted/' slwebtest.conf
+sed -i '/Required all granted/#Required all granted/' $APAslweb.conf
 
 
 #}
 
+function CreateApacheUser () {
+#CREATE AN APACHE USER FOR SECURITY
 
+echo "Please, enter a user for the Apache Server:"
+read auser
+#SET USER, PASSWORD WILL BE PROMPTED
+htpasswd -c $APA.htpasswd $auser
+
+
+#END APACHE USER
+}
 
 
 ## MAIN 
