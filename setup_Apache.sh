@@ -68,7 +68,7 @@ sudo systemctl enable firewalld
 sudo systemctl start firewalld
 
 #START IPTABLES
-sudo systemctl start iptables
+#sudo systemctl start iptables
 
 
 #ADD PERMANENT PORT TO APACHE 80
@@ -150,7 +150,7 @@ yes | cp -rf $CERTS/apache_sl.crt /etc/pki/tls/private/localhost.key
 
 }
 
-#function ModifyApacheServer () {
+function ModifyApacheServer () {
 #MODIFY ROUTEINES FOR APACHE
 #USING SED FOR APPEND LINES FOR APACHE TO SLWEB
 sed -i '/Require all granted/a \
@@ -163,8 +163,8 @@ sed -i '/Require all granted/a \
 #CHANGE THE REQUIRED ALL ACCESS TO COMMENT
 sed -i '/Required all granted/#Required all granted/' $APAslweb.conf
 
-
-#}
+#END Modify Apache Server
+}
 
 function CreateApacheUser () {
 #CREATE AN APACHE USER FOR SECURITY
@@ -183,12 +183,11 @@ htpasswd -c $APA.htpasswd $auser
 
 
 
-
-###
-
 CentOS7Packages
 	CentOS7Start
 		CentOS7Addons 
-		CentOS7Setting
-	#CentOS7SSL 
-EnableApachePorts
+			CentOS7Setting
+				CentOS7SSL 
+			ModifyApacheServer
+		CreateApacheUser
+	EnableApachePorts
