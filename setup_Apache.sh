@@ -57,7 +57,7 @@ if [[ "$_wsgi" == "mod_wsgi"* ]]
                 echo "Package MOD_WSGI              [OK]"
         else
                 echo "Proceed to Install Module"
-                sudo yum -y install wsgi 
+                sudo yum -y install mod_wsgi 
 
 
 fi
@@ -152,28 +152,26 @@ cp $_CAPA_TMP/localhost.crt $_TMP
 cp $_KAPA_TMP/localhost.key $_TMP 
 
 
-#REWRITE CERTS TO APACHE SSL FOLDER
-cp $CERTS/apache_sl.key /etc/pki/tls/certs/.
-cp $CERTS/apache_sl.crt /etc/pki/tls/private/.
+#COPY CERTS TO APACHE SSL FOLDER
+cp $CERTS/apache_sl.key /etc/pki/tls/certs/
+cp $CERTS/apache_sl.crt /etc/pki/tls/private/
 
 #comment SSLCertificateKeyFile in ssl.conf
 
 sed -i '/SSLCertificateKeyFile/s/^/#/' "$APA"ssl.conf
 
-sed -i '//#SSLCertificateKeyFile/a \
-        SSLCertificateKeyFile \etc\pki\tls\apache_sl.key \
+# APPEND NEW CERTIFICATE LINES AFTER SSLCertificateKeyFile
+sed -i '/#SSLCertificateKeyFile/a \
+        SSLCertificateKeyFile \/etc\/pki\/tls\/certs\/apache_sl.key \
         ' "$APA"ssl.conf
-
-
-
-
-
-
 
 
 #comment SSLCertificateFile in ssl.conf
 sed -i '/SSLCertificateFile/s/^/#/' "$APA"ssl.conf
 
+sed -i '/#SSLCertificateFile/a \
+        SSLCertificateFile \/etc\/pki\/tls\/private\/apache_sl.key \
+        ' "$APA"ssl.conf
 
 
 
@@ -191,7 +189,6 @@ sed -i '/Require all granted/a \
 
 #CHANGE THE REQUIRED ALL ACCESS TO COMMENT
 sed -i '/Required all granted/s/^/#/' "$APA"slweb.conf
-#sed -i '/mira esto/s/^/#/' hola.txt
 
 #END Modify Apache Server
 }
