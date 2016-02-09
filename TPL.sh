@@ -12,6 +12,7 @@ HOMEUSER=/home/secondlook
 CRONITI=CronOptions.sh
 DWL=Get_TPL.sh
 CREATETGS=CreateTargets.sh
+APACHESETUP=setup_Apache.sh
 # END GLOBAL VARIABLES ####
 
 function PackagesNeed () {
@@ -168,6 +169,15 @@ function CreateTargets () {
 }
 
 
+function ApacheSetup () {
+# CALL APACHE SETUP SCRIPT
+
+./$APACHESETUP
+
+
+
+
+} 
 
 
 
@@ -187,7 +197,7 @@ function CreateTargets () {
 				RateLimiting
 			CreateTargets 
 		Cronitizate
-
+	ApacheSetup
 #END FILE
 
 

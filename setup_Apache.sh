@@ -16,6 +16,7 @@ function CentOS7Packages (){
 _apache=$(rpm -qa | grep httpd| head -1)
 _openssl=$(rpm -qa openssl)
 _fw=$(rpm -qa firewalld)
+_wsgi=$(rpm -qa mod_wsgi)
 
 if [[ "$_apache" == "httpd"* ]]
         then
@@ -50,16 +51,33 @@ if [[ "$_fw" == "firewalld"* ]]
 
 fi
 
+#WSGI MODULE FOR APACHE DETECTION
+if [[ "$_wsgi" == "mod_wsgi"* ]]
+        then
+                echo "Package MOD_WSGI              [OK]"
+        else
+                echo "Proceed to Install Module"
+                sudo yum -y install wsgi 
+
+
+fi
+
+
+
+
+
+
+
+
+
 
 
 #END CentOS7Packages
 }
 
-function EnableApachePorts () {
+function CentOS7EnableApachePorts () {
 
 
-#CHECK IPTABLES 
-sudo systemctl status iptables
 
 #ENABLE FIREWALLD
 sudo systemctl enable firewalld
@@ -67,12 +85,10 @@ sudo systemctl enable firewalld
 #START FIREWALLD
 sudo systemctl start firewalld
 
-#START IPTABLES
-#sudo systemctl start iptables
-
 
 #ADD PERMANENT PORT TO APACHE 80
-sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+
 
 #ADD PERMANENT PORT TO 443
 sudo firewall-cmd --zone=public --add-port=443/tcp --permanent
@@ -81,18 +97,8 @@ sudo firewall-cmd --zone=public --add-port=443/tcp --permanent
 sudo firewall-cmd --reload
 
 
-
-
-
-
-#END Enable Apache POrts
+#END Enable Apache Ports
 }
-
-
-
-
-
-
 
 
 
@@ -104,21 +110,16 @@ function CentOS7Start () {
 sudo systemctl start httpd
 #enable on BOOT
 sudo systemctl enable httpd.service
-
+#END CentOS7start
 }
 
-function CentOS7Addons () {
-
-
-#install module wsgi over apache
-sudo yum install mod_wsgi
-
-
-}
 
 function CentOS7Setting (){
 
 #check SELinux
+#we need to check SELINUX!!!!
+
+
 
 #Command when SELinux is Enabled
 sudo setsebool -P httpd_read_user_content 1
@@ -132,18 +133,46 @@ sudo cp $WSGI $APA.
 function CentOS7SSL () {
 
 
-#CREATE FOLDER
+#CREATE FOLDER FOR TEMPORAL STORAGE
 
-sudo mkdir /etc/httpd/ssl
+_TMP=/etc/httpd/ssl
+
+sudo mkdir $_TMP 
 
 #CREATE CERTIFICATE
 
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/httpd/ssl/apache_sl.key -out /etc/httpd/ssl/apache_sl.crt
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $_TMP/apache_sl.key -out $_TMP/apache_sl.crt
 
-#REWRITE CERTS TO APACHE SSL
-yes | cp -rf $CERTS/apache_sl.key /etc/pki/tls/certs/localhost.crt
-yes | cp -rf $CERTS/apache_sl.crt /etc/pki/tls/private/localhost.key
+#SAVE ORIGINAL CERTS FROM APACHE REPOSITORY
+#CREATE VARS 
+_CAPA_TMP=/etc/pki/tls/certs
+_KAPA_TMP=/etc/pki/tls/private
+#BACKUPS CERTS
+cp $_CAPA_TMP/localhost.crt $_TMP 
+cp $_KAPA_TMP/localhost.key $_TMP 
 
+
+#REWRITE CERTS TO APACHE SSL FOLDER
+cp $CERTS/apache_sl.key /etc/pki/tls/certs/.
+cp $CERTS/apache_sl.crt /etc/pki/tls/private/.
+
+#comment SSLCertificateKeyFile in ssl.conf
+
+sed -i '/SSLCertificateKeyFile/s/^/#/' "$APA"ssl.conf
+
+sed -i '//#SSLCertificateKeyFile/a \
+        SSLCertificateKeyFile \etc\pki\tls\apache_sl.key \
+        ' "$APA"ssl.conf
+
+
+
+
+
+
+
+
+#comment SSLCertificateFile in ssl.conf
+sed -i '/SSLCertificateFile/s/^/#/' "$APA"ssl.conf
 
 
 
@@ -157,11 +186,12 @@ sed -i '/Require all granted/a \
 	AuthType Basic \
 	AuthName "Restricted Content" \
 	AuthUserFile \/etc\/httpd\/conf.d\/.htpasswd \
-	Require valid-user' $APAslweb.conf
+	Require valid-user' "$APA"slweb.conf
 
 
 #CHANGE THE REQUIRED ALL ACCESS TO COMMENT
-sed -i '/Required all granted/#Required all granted/' $APAslweb.conf
+sed -i '/Required all granted/s/^/#/' "$APA"slweb.conf
+#sed -i '/mira esto/s/^/#/' hola.txt
 
 #END Modify Apache Server
 }
@@ -185,9 +215,8 @@ htpasswd -c $APA.htpasswd $auser
 
 CentOS7Packages
 	CentOS7Start
-		CentOS7Addons 
 			CentOS7Setting
 				CentOS7SSL 
 			ModifyApacheServer
 		CreateApacheUser
-	EnableApachePorts
+CentOS7EnableApachePorts
