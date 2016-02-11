@@ -12,22 +12,41 @@ CERTS=/etc/httpd/ssl
 #END GLOBAL VARS
 
 function CentOS7Packages (){
+#
+#Query Packages for Apache, Mod SSL, firewalld, wgi, 
 
-_apache=$(rpm -qa | grep httpd| head -1)
+_apache=$(rpm -qa httpd)
 _openssl=$(rpm -qa openssl)
 _fw=$(rpm -qa firewalld)
 _wsgi=$(rpm -qa mod_wsgi)
+_mod_ssl=$(rpm -qa mod_ssl)
 
+
+
+#DETECTING APACHE
 if [[ "$_apache" == "httpd"* ]]
         then
                 echo "Package APACHE              [OK]"
         else
                 echo "Proceed to Install APACHE"
  		sudo yum -y install httpd
-		sudo yum -y install mod_ssl
 
                 
 fi
+
+#DETECTING MOD SSL
+
+if [[ "$_mod_ssl" == "mod_ssl"* ]]
+        then
+                echo "Package MOD SSL              [OK]"
+        else
+                echo "Proceed to Install MOD_SSL"
+                sudo yum -y install mod_ssl
+
+
+fi
+
+#DETECTING OPENSSL
 
 #OPENSSL DETECTION
 
@@ -106,10 +125,15 @@ function CentOS7Start () {
 #start function
 #ROUTINES FOR START 
 
-#start apache
-sudo systemctl start httpd
-#enable on BOOT
+#enable on BOOT Apache
 sudo systemctl enable httpd.service
+
+
+#start apache
+
+sudo systemctl start httpd
+
+
 #END CentOS7start
 }
 
@@ -137,7 +161,14 @@ function CentOS7SSL () {
 
 _TMP=/etc/httpd/ssl
 
-sudo mkdir $_TMP 
+
+if [ -d "$_TMP" ]
+then
+	echo "$_TMP exists"
+else
+	sudo mkdir $_TMP
+fi
+ 
 
 #CREATE CERTIFICATE
 
@@ -153,8 +184,8 @@ cp $_KAPA_TMP/localhost.key $_TMP
 
 
 #COPY CERTS TO APACHE SSL FOLDER
-cp $CERTS/apache_sl.key /etc/pki/tls/certs/
-cp $CERTS/apache_sl.crt /etc/pki/tls/private/
+cp $CERTS/apache_sl.key $_KAPA_TMP/ 
+cp $CERTS/apache_sl.crt $_CAPA_TMP/ 
 
 #comment SSLCertificateKeyFile in ssl.conf
 
@@ -162,7 +193,7 @@ sed -i '/SSLCertificateKeyFile/s/^/#/' "$APA"ssl.conf
 
 # APPEND NEW CERTIFICATE LINES AFTER SSLCertificateKeyFile
 sed -i '/#SSLCertificateKeyFile/a \
-        SSLCertificateKeyFile \/etc\/pki\/tls\/certs\/apache_sl.key \
+        SSLCertificateKeyFile \/etc\/pki\/tls\/private\/apache_sl.key \
         ' "$APA"ssl.conf
 
 
@@ -170,7 +201,7 @@ sed -i '/#SSLCertificateKeyFile/a \
 sed -i '/SSLCertificateFile/s/^/#/' "$APA"ssl.conf
 
 sed -i '/#SSLCertificateFile/a \
-        SSLCertificateFile \/etc\/pki\/tls\/private\/apache_sl.key \
+        SSLCertificateFile \/etc\/pki\/tls\/certs\/apache_sl.crt \
         ' "$APA"ssl.conf
 
 
@@ -188,7 +219,7 @@ sed -i '/Require all granted/a \
 
 
 #CHANGE THE REQUIRED ALL ACCESS TO COMMENT
-sed -i '/Required all granted/s/^/#/' "$APA"slweb.conf
+sed -i '/Require all granted/s/^/#/' "$APA"slweb.conf
 
 #END Modify Apache Server
 }
