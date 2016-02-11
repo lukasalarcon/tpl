@@ -37,6 +37,61 @@ function AddKey () {
 #COPY KEY TO 
 _MYKEY=$(more $HOMEUSER/.ssh/id_rsa.pub)
 
+#CHANGE THE DEFAULT VALUE FOR THE KEY
 sed -i '/PUBLIC_KEY_GOES_HERE/'$_MYKEY'/' $_SECONDLOOK/agent_ssh_authorized_keys 
 
 }
+
+function CentOS7_AnsibleInstalation () {
+
+_AnsInst=$(rpm -qa ansible)
+
+#DETECT ANSIBLE PACKAGER
+if [[ "$_AnsInst" == "ansible"* ]]
+        then
+                echo "Package ANSIBLE              [OK]"
+        else
+                echo "Proceed to Install ANSIBLE"
+                sudo yum -y install ansible
+fi
+
+
+
+
+
+#CentOS7_Ansible End
+}
+
+
+function CreateAnsiblePlaybook () {
+#Adjust parametes for Ansible Playbook
+
+_MYPLAYBOOK=/etc/myplaybook
+
+mkdir $_MYPLAYBOOK 
+
+
+if [ -f $_SECONDLOOK/ansible/agent_deploy.yaml ]
+	then
+		echo "Found original Plabook"
+	else
+		echo "We cannot find Agent Playbook"
+		exit 1
+fi	 
+
+#COPY YAML TO MYPLAYBOOK
+cp $_SECONDLOOK/ansible/agent_deploy.yaml $_MYPLAYBOOK 
+
+#COPY KEYS TO MYPLAYBOOK
+cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK
+
+
+
+
+
+
+
+#Ansible Playbook End Function
+}
+
+
