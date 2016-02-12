@@ -7,6 +7,7 @@
 _SECONDLOOK=/usr/share/secondlook
 _MYKEY=
 HOMEUSER=/home/secondlook
+TARGET_FILE=/etc/secondlook/targets
 #
 
 function ValidateKey () {
@@ -85,7 +86,21 @@ cp $_SECONDLOOK/ansible/agent_deploy.yaml $_MYPLAYBOOK
 #COPY KEYS TO MYPLAYBOOK
 cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK
 
-
+#CHECK FOR HOSTS FILE
+if [ -f $_MYPLAYBOOK/hosts ]
+	echo "File exists. Do you want to overwrite it?(y/n)"
+		if [ "$myans == "y" -o "$myans" == "Y"]
+			then
+			rm -f $_MYPLAYBOOK/hosts
+			#WRITE A HEAD SL_TARGETS	
+			echo "[SL_targets]" > $_MYPLAYBOOK/hosts
+		else	
+			echo "[SL_targets]" > $_MYPLAYBOOK/hosts
+else
+		echo "[SL_targets]" > $_MYPLAYBOOK/hosts
+		#APPEND CONTENTS FROM TARGETS TO HOSTS TO PLAYBOOK	
+		cat $TARGET_FILE  >> $_MYPLAYBOOK/hosts
+fi
 
 
 
