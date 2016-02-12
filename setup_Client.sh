@@ -1,6 +1,6 @@
 #!/bin/bash
 #DEBUG
-#set -x
+set -x
 #END DEBUG
 
 #GLOBAL VARS
@@ -13,7 +13,7 @@ TARGET_FILE=/etc/secondlook/targets
 function ValidateKey () {
 #Validates agent_ssh_authorized_keys
 
-if [ -b $_SECONDLOOK/agent_ssh_authorized_keys ]
+if [ -f $_SECONDLOOK/agent_ssh_authorized_keys ]
    then
 	echo "Found agent_ssh_autorized_keys"
    else
@@ -44,7 +44,7 @@ sed -i '/PUBLIC_KEY_GOES_HERE/'$_MYKEY'/' $_SECONDLOOK/agent_ssh_authorized_keys
 }
 
 function CentOS7_AnsibleInstalation () {
-
+#START CENTOS ANSIBLE INSTALAION FUNCTION
 _AnsInst=$(rpm -qa ansible)
 
 #DETECT ANSIBLE PACKAGER
@@ -88,14 +88,16 @@ cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK
 
 #CHECK FOR HOSTS FILE
 if [ -f $_MYPLAYBOOK/hosts ]
+then
 	echo "File exists. Do you want to overwrite it?(y/n)"
-		if [ "$myans == "y" -o "$myans" == "Y"]
+		if [ "$myans" == "y" -o "$myans" == "Y"]
 			then
 			rm -f $_MYPLAYBOOK/hosts
 			#WRITE A HEAD SL_TARGETS	
 			echo "[SL_targets]" > $_MYPLAYBOOK/hosts
 		else	
 			echo "[SL_targets]" > $_MYPLAYBOOK/hosts
+		fi
 else
 		echo "[SL_targets]" > $_MYPLAYBOOK/hosts
 		#APPEND CONTENTS FROM TARGETS TO HOSTS TO PLAYBOOK	
@@ -109,4 +111,10 @@ fi
 #Ansible Playbook End Function
 }
 
+#MAIN
+
+	ValidateKey
+		AddKey
+			CentOS7_AnsibleInstalation
+			CreateAnsiblePlaybook
 
