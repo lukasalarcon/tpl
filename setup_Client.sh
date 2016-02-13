@@ -39,7 +39,7 @@ function AddKey () {
 _MYKEY=$(more $HOMEUSER/.ssh/id_rsa.pub)
 
 #CHANGE THE DEFAULT VALUE FOR THE KEY
-sed -i '/PUBLIC_KEY_GOES_HERE/'"$_MYKEY"'/' $_SECONDLOOK/agent_ssh_authorized_keys 
+sed -i "s/PUBLIC_KEY_GOES_HERE/${_MYKEY}/g" $_SECONDLOOK/agent_ssh_authorized_keys 
 
 }
 
@@ -71,7 +71,7 @@ _MYPLAYBOOK=/etc/myplaybook
 
 if [ -d $_MYPLAYBOOK ]
 	then
-			
+		echo "Found myplaybook folder..."		
 	else
 		mkdir $_MYPLAYBOOK 
 fi
@@ -90,23 +90,30 @@ cp $_SECONDLOOK/ansible/agent_deploy.yaml $_MYPLAYBOOK
 #COPY KEYS TO MYPLAYBOOK
 cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK
 
+
+#CREATE A LIST FROM SL TARGETS
+_TARGETS=$(cat $TARGET_FILE)
+
+
+
 #CHECK FOR HOSTS FILE
 if [ -f $_MYPLAYBOOK/hosts ]
 then
 	echo "File exists. Do you want to overwrite it?(y/n)"
 		read myans
-		if [ "$myans" == "y" -o "$myans" == "Y"]
+		if [ "$myans" == "y" -o "$myans" == "Y" ]
 			then
 			rm -f $_MYPLAYBOOK/hosts
 			#WRITE A HEAD SL_TARGETS	
 			echo "[SL_targets]" > $_MYPLAYBOOK/hosts
+			echo -e "$_TARGETS" >> $_MYPLAYBOOK/hosts
 		else	
-			echo "[SL_targets]" > $_MYPLAYBOOK/hosts
+			echo -e "$_TARGETS" >> $_MYPLAYBOOK/hosts
 		fi
 else
 		echo "[SL_targets]" > $_MYPLAYBOOK/hosts
 		#APPEND CONTENTS FROM TARGETS TO HOSTS TO PLAYBOOK	
-		cat $TARGET_FILE  >> $_MYPLAYBOOK/hosts
+		echo -e "$_TARGETS"  >> $_MYPLAYBOOK/hosts
 fi
 
 
@@ -121,7 +128,7 @@ function SpecialAccounts () {
 #use Special Accounts for particular accounts in hosts targets
 
 
-
+echo "NO func"
 
 
 
