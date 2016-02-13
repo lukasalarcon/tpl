@@ -39,7 +39,7 @@ function AddKey () {
 _MYKEY=$(more $HOMEUSER/.ssh/id_rsa.pub)
 
 #CHANGE THE DEFAULT VALUE FOR THE KEY
-sed -i '/PUBLIC_KEY_GOES_HERE/'$_MYKEY'/' $_SECONDLOOK/agent_ssh_authorized_keys 
+sed -i '/PUBLIC_KEY_GOES_HERE/'"$_MYKEY"'/' $_SECONDLOOK/agent_ssh_authorized_keys 
 
 }
 
@@ -69,12 +69,16 @@ function CreateAnsiblePlaybook () {
 
 _MYPLAYBOOK=/etc/myplaybook
 
-mkdir $_MYPLAYBOOK 
-
+if [ -d $_MYPLAYBOOK ]
+	then
+			
+	else
+		mkdir $_MYPLAYBOOK 
+fi
 
 if [ -f $_SECONDLOOK/ansible/agent_deploy.yaml ]
 	then
-		echo "Found original Plabook"
+		echo "Found original Playbook"
 	else
 		echo "We cannot find Agent Playbook"
 		exit 1
@@ -90,6 +94,7 @@ cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK
 if [ -f $_MYPLAYBOOK/hosts ]
 then
 	echo "File exists. Do you want to overwrite it?(y/n)"
+		read myans
 		if [ "$myans" == "y" -o "$myans" == "Y"]
 			then
 			rm -f $_MYPLAYBOOK/hosts
@@ -110,6 +115,39 @@ fi
 
 #Ansible Playbook End Function
 }
+
+function SpecialAccounts () {
+#start Special Accounts
+#use Special Accounts for particular accounts in hosts targets
+
+
+
+
+
+
+
+
+#end Special Accounts
+}
+
+function StartRemoteDeploy () {
+#start Start RemoteDeploy allows start Ansible Process
+
+
+sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml
+
+
+
+
+
+
+
+# stop RemoteDeploy function
+}
+
+
+
+
 
 #MAIN
 
