@@ -153,7 +153,31 @@ case $mysel in
 	1) 
 		echo "Please, enter the batch value: ( 10. or 10.0.0):"
 		read MY_EXPRESS
-		grep --only-matching --perl-regex "($MY_EXPRESS)" $_MYPLAYBOOK/hosts
+		echo "Enter the remote user:"
+		read RUSER
+		#ASSIGN THE USER TO VARIABLE
+		SCMO=" ansible_connection=ssh ansible_user=$RUSER"
+		SCR=$(grep --only-matching --perl-regex "($MY_EXPRESS)" $_MYPLAYBOOK/hosts)
+		echo "We have match:"
+		echo $SCR | more
+		echo "Is this matching OK?(y/n)"
+		read yesno
+		if [ "$yesno" == "y" -o "$yesno" == "Y" ]
+			then
+				echo "Modifying values"
+				#START MODIFICATION
+				#AVOID TO MODIFY VALUES INJECTED...ISSUE	
+				sed "/^${MY_EXPRESS}/s/$/${SCMO}/" $_MYPLAYBOOK/hosts
+
+
+
+
+
+			else
+				echo "Skipping modification. Try again"
+		fi
+
+
 		
 	;;
 	2)
@@ -165,10 +189,13 @@ case $mysel in
 		#SETUP REMOTE USER FOR A SPECIFIC HOST
 		echo "Please, enter the remote user for this host:"
 		read RUSER
+		#ADD VALUES TO HOSTS NOT PLAYBOOK!
 		SCM="ansible_connection=ssh ansible_user=$RUSER"
 		
 		echo $SCM		
-		sed -i -- "s/${SC}/${SCM}/" $_MYPLAYBOOK/hosts 
+		#REPLACE THE FIRST OCCURRENCE
+		sed -i "0,/${SC}/s//${SC} ${SCM}/" $_MYPLAYBOOK/hosts
+
 
 	;;
 
