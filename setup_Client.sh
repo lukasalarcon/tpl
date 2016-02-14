@@ -128,7 +128,29 @@ function SpecialAccounts () {
 #use Special Accounts for particular accounts in hosts targets
 
 
-echo "NO func"
+echo "Please, choose the following options:"
+echo "1) Batch Processing \
+         Summary: It will allow a batch procesisn for a range by \
+	  adding the same account to the regex you need"
+echo "2) Single Processing \
+	  Summary: It will allow single value to be modified"
+echo "3) Exit"
+
+read mysel
+
+case $mysel in
+
+	1) 
+		echo "Please, enter the batch value: ( 10. or 10.0.0):"
+		read MY_EXPRESS
+		grep --only-matching --perl-regex "($MY_EXPRESS)" $_MYPLAYBOOK/hosts
+		
+	;;
+	2)
+		grep --only-matching --perl-regex "($MY_EXPRESS$)" $_MYPLAYBOOK/hosts
+	;;
+
+	
 
 
 
