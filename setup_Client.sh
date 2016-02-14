@@ -41,7 +41,16 @@ function AddKey () {
 _MYKEY=$(more $HOMEUSER/.ssh/id_rsa.pub)
 
 #CHANGE THE DEFAULT VALUE FOR THE KEY
-sed -i "s/PUBLIC_KEY_GOES_HERE/${_MYKEY}/g" $_SECONDLOOK/agent_ssh_authorized_keys 
+#sed -i "s/PUBLIC_KEY_GOES_HERE/${_MYKEY}/g" $_SECONDLOOK/agent_ssh_authorized_keys 
+
+
+sed -i -- 's/PUBLIC_KEY_GOES_HERE/${_MYKEY}/' $_SECONDLOOK/agent_ssh_authorized_keys
+
+
+
+
+
+
 
 }
 
@@ -152,11 +161,15 @@ case $mysel in
 		read MY_EXPRESS
 		#SETUP REGEX FOR SEARCHING FOR
 		SC=$(grep --only-matching --perl-regex "($MY_EXPRESS\$)" $_MYPLAYBOOK/hosts)
+		echo $SC
 		#SETUP REMOTE USER FOR A SPECIFIC HOST
 		echo "Please, enter the remote user for this host:"
 		read RUSER
-		SCM="$SC ansible_connection=ssh ansible_user=$RUSER"
+		SCM="ansible_connection=ssh ansible_user=$RUSER"
+		
 		echo $SCM		
+		sed -i -- "s/${SC}/${SCM}/" $_MYPLAYBOOK/hosts 
+
 	;;
 
 esac	
