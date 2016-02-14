@@ -8,6 +8,8 @@ _SECONDLOOK=/usr/share/secondlook
 _MYKEY=
 HOMEUSER=/home/secondlook
 TARGET_FILE=/etc/secondlook/targets
+_MYPLAYBOOK=/etc/myplaybook
+
 #
 
 function ValidateKey () {
@@ -67,7 +69,6 @@ fi
 function CreateAnsiblePlaybook () {
 #Adjust parametes for Ansible Playbook
 
-_MYPLAYBOOK=/etc/myplaybook
 
 if [ -d $_MYPLAYBOOK ]
 	then
@@ -147,10 +148,18 @@ case $mysel in
 		
 	;;
 	2)
-		grep --only-matching --perl-regex "($MY_EXPRESS$)" $_MYPLAYBOOK/hosts
+		echo "Please, enter a single value: ( 10.0.0.1 or tpl.local)"
+		read MY_EXPRESS
+		#SETUP REGEX FOR SEARCHING FOR
+		SC=$(grep --only-matching --perl-regex "($MY_EXPRESS\$)" $_MYPLAYBOOK/hosts)
+		#SETUP REMOTE USER FOR A SPECIFIC HOST
+		echo "Please, enter the remote user for this host:"
+		read RUSER
+		SCM="$SC ansible_connection=ssh ansible_user=$RUSER"
+		echo $SCM		
 	;;
 
-	
+esac	
 
 
 
@@ -180,8 +189,8 @@ sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_depl
 
 #MAIN
 
-	ValidateKey
-		AddKey
-			CentOS7_AnsibleInstalation
-			CreateAnsiblePlaybook
-
+#	ValidateKey
+#		AddKey
+#			CentOS7_AnsibleInstalation
+#			CreateAnsiblePlaybook
+			SpecialAccounts
