@@ -209,9 +209,15 @@ done
 function StartRemoteDeploy () {
 #start Start RemoteDeploy allows start Ansible Process
 
+echo "Would you like to start the remote deployment tasks?"
+read yesno
 
-sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml
-
+if [ "$yesno" == "y" -o "$yesno" == "Y" ]  
+	then
+		sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml
+	else
+		echo "Deploy not needed"
+fi
 
 
 
@@ -227,8 +233,11 @@ sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_depl
 
 #MAIN
 
-#	ValidateKey
+	ValidateKey
 		AddKey
-#			CentOS7_AnsibleInstalation
-#		CreateAnsiblePlaybook
-#	SpecialAccounts
+			CentOS7_AnsibleInstalation
+		CreateAnsiblePlaybook
+	SpecialAccounts
+StartRemoteDeploy
+
+#END MAIN
