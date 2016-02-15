@@ -41,10 +41,8 @@ function AddKey () {
 _MYKEY=$(more $HOMEUSER/.ssh/id_rsa.pub)
 
 #CHANGE THE DEFAULT VALUE FOR THE KEY
-#sed -i "s/PUBLIC_KEY_GOES_HERE/${_MYKEY}/g" $_SECONDLOOK/agent_ssh_authorized_keys 
-
-
-sed -i -- 's/PUBLIC_KEY_GOES_HERE/${_MYKEY}/' $_SECONDLOOK/agent_ssh_authorized_keys
+#USING PARAMETER EXPANSION IN _MYKEY FOR ISSUES WITH BACKSLAHES
+sed -i "/PUBLIC_KEY_GOES_HERE/s//${_MYKEY//\//\/}/" $_SECONDLOOK/agent_ssh_authorized_keys
 
 
 
@@ -137,6 +135,7 @@ function SpecialAccounts () {
 #start Special Accounts
 #use Special Accounts for particular accounts in hosts targets
 
+while [ "$mysel" != 3 ]; do
 
 echo "Please, choose the following options:"
 echo "1) Batch Processing \
@@ -166,18 +165,14 @@ case $mysel in
 			then
 				echo "Modifying values"
 				#START MODIFICATION
-				#AVOID TO MODIFY VALUES INJECTED...ISSUE	
-				sed "/^${MY_EXPRESS}/s/$/${SCMO}/" $_MYPLAYBOOK/hosts
+				#AVOID TO MODIFY VALUES INJECTED...ISSUE
 
-
-
-
+				#/s/$/${SCMO}  replace keeping the data found	
+				sed -i "/^${MY_EXPRESS}/s/$/${SCMO}/" $_MYPLAYBOOK/hosts
 
 			else
 				echo "Skipping modification. Try again"
 		fi
-
-
 		
 	;;
 	2)
@@ -198,9 +193,12 @@ case $mysel in
 
 
 	;;
+	3) 	mysel=3
+		;;	
 
 esac	
-
+#END LOOP
+done
 
 
 
@@ -230,7 +228,7 @@ sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_depl
 #MAIN
 
 #	ValidateKey
-#		AddKey
+		AddKey
 #			CentOS7_AnsibleInstalation
-#			CreateAnsiblePlaybook
-			SpecialAccounts
+#		CreateAnsiblePlaybook
+#	SpecialAccounts
