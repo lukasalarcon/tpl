@@ -188,9 +188,9 @@ function ApacheSetup () {
 
 
 	PackagesNeed
-		#AddRepo
-		#	DownloadP
-			#	InstallRPM 
+		AddRepo
+			DownloadP
+				InstallRPM 
 					AddUser
 					GenerateKey
 					AddKeyProduct
