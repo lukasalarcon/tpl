@@ -3,6 +3,9 @@ set -x
 
 function GetWget () {
 
+
+_wget=$(rpm -qa wget)
+
 #GETTING WGET
 if [[ "$_wget" == "wget"* ]]
         then
