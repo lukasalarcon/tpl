@@ -227,7 +227,27 @@ fi
 # stop RemoteDeploy function
 }
 
+function PrepareAgent () {
+#start PrepareAgent
 
+#check if package exists 
+
+if [ -f $SAGENT	 ]
+	then
+		echo "File Agent Found	[OK]"
+		sudo tar -xzf $SAGENT .....	
+
+	else
+fi
+
+
+
+
+
+
+
+#PrepareAgent function ends here
+}
 
 
 
