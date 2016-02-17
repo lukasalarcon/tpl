@@ -93,9 +93,19 @@ function GenerateKey (){
 mkdir $HOMEUSER/.ssh
 ssh-keygen -f $HOMEUSER/.ssh/id_rsa -t rsa -N ''
 
-#COPY KEYGEN KEY
-cp /usr/share/secondlook/ssh_config $HOMEUSER/.ssh/config
+#DECLARE VAR FOR ssh_config
+SCONFIG=/usr/share/secondlook/ssh_config
 
+if [ -f $SCONFIG ]
+	then
+		#COPY KEYGEN KEY
+		cp $SCONFIG $HOMEUSER/.ssh/config
+	else
+		echo "I cannot find $SCONFIG. Please, retry"
+		exit 1
+fi
+
+#END GENERATEKEY
 
 }
 
@@ -188,9 +198,9 @@ function ApacheSetup () {
 
 
 	PackagesNeed
-		AddRepo
-			DownloadP
-				InstallRPM 
+		#AddRepo
+		#	DownloadP
+			#	InstallRPM 
 					AddUser
 					GenerateKey
 					AddKeyProduct

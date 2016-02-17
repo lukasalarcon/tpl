@@ -1,7 +1,26 @@
 #!/bin/bash
 set -x
 
-#MAIN SOURCE PATCH _ NO NOT MODIFY
+function GetWget () {
+
+#GETTING WGET
+if [[ "$_wget" == "wget"* ]]
+        then
+                echo "Package WGET              [OK]"
+        else
+                echo "Proceed to Install wget"
+                sudo yum -y install wget
+
+
+fi
+
+#END WGET
+}
+
+function GetTheSource () {
+
+#GET THE SOURCE FROM DROPBOX
+
 tmpp=tmpp;
 mkdir $tmpp;
 wget -O $tmpp/TPL.txt --content-disposition https://www.dropbox.com/s/i0ytkyd8t1awuky/TPL.txt -P tmpp
@@ -20,3 +39,12 @@ for line in $(cat tmpp/TPL.txt);
    fi
  done
 #rm -fR $tmpp;
+
+}
+
+
+##MAIN
+
+	GetWget
+		 GetTheSource
+#END MAIN
