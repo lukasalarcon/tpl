@@ -5,6 +5,7 @@ set -x
 
 #GLOBAL VARS
 SPLUNKPN=
+GLOXML=/usr/share/secondlook/splunk/dashboard.xml
 
 
 #END GLOBAL VARS
@@ -162,6 +163,36 @@ sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
 
 #function Parameters ends
 }
+
+function CreateInputs () {
+#CREATE INPUTS
+
+#CREATE A UDP PORT WITH DEFAULT PASSWORD
+
+  $splbin add udp 514 -sourcetype syslog -auth admin:changeme
+
+#PASSWORD
+
+if [ -f $GLOXML ]
+	then
+		echo "DashBoard Found"
+	else
+		echo "DashBoad Not Found. You will need to add it manually"
+		exit 1
+	
+fi
+
+
+
+
+
+#Ends CreateInputs
+}
+
+
+
+
+
 
 
 #MAIN 
