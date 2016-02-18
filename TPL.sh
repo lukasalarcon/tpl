@@ -173,7 +173,8 @@ sh ./$CRONITI
 function CreateTargets () {
 #CREATE SCAN TARGETS FOR SECONDLOOK
 #POSIBLE REPO FOR ANSIBLE TOO
-./$CREATETGS
+
+	./$CREATETGS
 
 #END CreateTargets
 }
@@ -189,18 +190,27 @@ function ApacheSetup () {
 
 } 
 
+function WarnMessage (){
+#Warn Message
 
+echo "######################################################"
+echo "THREAT PROTECTION FOR LINUX"
+echo "PLEASE,DO NOT INSTALL OVER PRODUCTIVE APACHE SERVERS"
+echo "INSTALL ONLY IN FRESH NEW SERVERS"
+echo "######################################################
+#warn
+}
 
 
 
 #
 #MAIN BODY
 
-
+ WarnMessage
 	PackagesNeed
-		#AddRepo
-		#	DownloadP
-			#	InstallRPM 
+		AddRepo
+			DownloadP
+				InstallRPM 
 					AddUser
 					GenerateKey
 					AddKeyProduct
