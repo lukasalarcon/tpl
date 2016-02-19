@@ -71,7 +71,7 @@ splbin=$(find / -name splunk -type f -perm -u+x)
 
         fi
 
-#firewall rule
+#firewall rule for Splunk Package
 
 sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
 
@@ -82,10 +82,10 @@ sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
 
 
 function JoinFunctions () {
-#UNIFY 2 functions only
+#UNIFY functions only
 
                 Parameters
-
+			 CreateInputs
 
 
 
@@ -176,6 +176,8 @@ function CreateInputs () {
 if [ -f $GLOXML ]
 	then
 		echo "DashBoard Found"
+		#COPY DASHBOARD TO A LOCAL SPLUNK REPO
+		cp $GLOXML /opt/splunk/etc/users/admin/search/local/data/ui/views/
 	else
 		echo "DashBoad Not Found. You will need to add it manually"
 		exit 1
