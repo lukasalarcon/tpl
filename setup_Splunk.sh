@@ -163,7 +163,7 @@ if [ -f $GLOXML ]
 		echo "DashBoard Found"
 		#COPY DASHBOARD TO A LOCAL SPLUNK REPO
 		#CHECK IF USER HAS CHOOSEN A DIFFERENT FOLDER
-		if [ $myfolder != "" ]
+		if [ ! -z "$myfolder"  ]
 			then
 				mkdir -p $myfolder/etc/users/admin/search/local/data/ui/views/
 				cp $GLOXML $myfolder/etc/users/admin/search/local/data/ui/views/
