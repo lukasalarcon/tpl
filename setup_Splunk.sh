@@ -1,6 +1,6 @@
 #!/bin/bash
 #DEBUG
-set -x
+#set -x
 # END DEBUG
 
 #GLOBAL VARS
@@ -59,7 +59,7 @@ esac
 
 function Parameters () {
 # check all parameters for splunk
-splbin=$(find / -name splunk -type f -perm -u+x)
+splbin=$(find /opt -name splunk -type f -perm -u+x)
 
         if [ -f $splbin ]
                 then
@@ -143,7 +143,7 @@ done
 
 function Parameters () {
 # check all parameters for splunk
-splbin=$(find / -name splunk -type f -perm -u+x)
+splbin=$(find /opt -name splunk -type f -perm -u+x)
 
 	if [ -f $splbin ]
 		then
@@ -177,6 +177,7 @@ if [ -f $GLOXML ]
 	then
 		echo "DashBoard Found"
 		#COPY DASHBOARD TO A LOCAL SPLUNK REPO
+		mkdir /opt/splunk/etc/users/admin/search/local/data/ui/views/
 		cp $GLOXML /opt/splunk/etc/users/admin/search/local/data/ui/views/
 	else
 		echo "DashBoad Not Found. You will need to add it manually"
