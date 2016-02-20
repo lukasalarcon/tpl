@@ -231,13 +231,17 @@ function PrepareAgent () {
 #start PrepareAgent
 
 #check if package exists 
+SAGENT=$(ls -LR tmpp/secondlook-agent*.tar.gz)
 
 if [ -f $SAGENT	 ]
 	then
 		echo "File Agent Found	[OK]"
-		sudo tar -xzf $SAGENT .....	
+		sudo tar -xzf $SAGENT -C $_MYPLAYBOOK/
+	
 
 	else
+		echo "File Agent not found!"
+		
 fi
 
 
@@ -257,6 +261,7 @@ fi
 		AddKey
 			CentOS7_AnsibleInstalation
 		CreateAnsiblePlaybook
+		PrepareAgent
 	SpecialAccounts
 StartRemoteDeploy
 

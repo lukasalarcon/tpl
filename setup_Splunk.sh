@@ -59,7 +59,14 @@ esac
 
 function Parameters () {
 # check all parameters for splunk
-splbin=$(find /opt -name splunk -type f -perm -u+x)
+
+if [ "$myfolder" != ""	]
+	then
+		splbin=$(find /opt -name splunk -type f -perm -u+x)
+	else
+		splbin=$(find /opt -name splunk -type f -perm -u+x)
+
+fi
 
         if [ -f $splbin ]
                 then
@@ -141,28 +148,6 @@ done
 
 }
 
-function Parameters () {
-# check all parameters for splunk
-splbin=$(find /opt -name splunk -type f -perm -u+x)
-
-	if [ -f $splbin ]
-		then
-			echo "Splunk Binary Detected"
-			$splbin start --accept-license
-			$splbin enable boot-start
-
-		else
-			echo "Splunk Binary Not detected"
-
-	fi
-
-#firewall rule
-
-sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
-
-
-#function Parameters ends
-}
 
 function CreateInputs () {
 #CREATE INPUTS
@@ -177,14 +162,28 @@ if [ -f $GLOXML ]
 	then
 		echo "DashBoard Found"
 		#COPY DASHBOARD TO A LOCAL SPLUNK REPO
-		mkdir /opt/splunk/etc/users/admin/search/local/data/ui/views/
-		cp $GLOXML /opt/splunk/etc/users/admin/search/local/data/ui/views/
+		#CHECK IF USER HAS CHOOSEN A DIFFERENT FOLDER
+		if [ $myfolder != "" ]
+			then
+				mkdir -p $myfolder/etc/users/admin/search/local/data/ui/views/
+				cp $GLOXML $myfolder/etc/users/admin/search/local/data/ui/views/
+
+			else
+				mkdir -p /opt/splunk/etc/users/admin/search/local/data/ui/views/
+				cp $GLOXML /opt/splunk/etc/users/admin/search/local/data/ui/views/
+
+
+		fi
 	else
 		echo "DashBoad Not Found. You will need to add it manually"
 		exit 1
 	
 fi
 
+
+#RESTART SERVICES FOR GET THE DASHBOARD READY
+$splbin stop
+$splbin start 
 
 
 
@@ -193,6 +192,33 @@ fi
 }
 
 
+function ModifyLogLinux () {
+#Modify Linux Forward to Send info to Splunk
+#
+IPSPLUNK=$(hostname -I)
+
+
+
+	echo "we have detected the following ip address: $IPSLUNK"
+	echo "Is this IP, the Splunk IP?(y/n)"
+	read yesno
+	if [ "$yesno" == "y" -o "$yesno" == "Y" ]
+		then
+			echo "local2.*	@$IPSPLUNK" >> /etc/rsyslog.conf
+		else
+			echo "Please, enter the SPLUNK IP"
+			read IPSPLUNK
+			echo "local2.*  @$IPSPLUNK" >> /etc/rsyslog.conf
+
+	fi
+
+	#RESTART RSYSLOG FOR APPLYING CHANGES
+	systemctl restart rsyslog
+	
+
+
+
+}
 
 
 
@@ -200,3 +226,4 @@ fi
 
 #MAIN 
 	GetSplunk
+		ModifyLogLinux
