@@ -1,7 +1,13 @@
+#!/bin/bash
+
+# GNU GPL Software under the GPL may be run for all purposes, including commercial purposes and even as a tool for creating proprietary software.
+
+
+
 ##INSTALL###
 
 #DEBUG SCRIPT
-set -x
+#set -x
 #
 
 #
@@ -93,9 +99,19 @@ function GenerateKey (){
 mkdir $HOMEUSER/.ssh
 ssh-keygen -f $HOMEUSER/.ssh/id_rsa -t rsa -N ''
 
-#COPY KEYGEN KEY
-cp /usr/share/secondlook/ssh_config $HOMEUSER/.ssh/config
+#DECLARE VAR FOR ssh_config
+SCONFIG=/usr/share/secondlook/ssh_config
 
+if [ -f $SCONFIG ]
+	then
+		#COPY KEYGEN KEY
+		cp $SCONFIG $HOMEUSER/.ssh/config
+	else
+		echo "I cannot find $SCONFIG. Please, retry"
+		exit 1
+fi
+
+#END GENERATEKEY
 
 }
 
@@ -163,7 +179,8 @@ sh ./$CRONITI
 function CreateTargets () {
 #CREATE SCAN TARGETS FOR SECONDLOOK
 #POSIBLE REPO FOR ANSIBLE TOO
-./$CREATETGS
+
+	./$CREATETGS
 
 #END CreateTargets
 }
@@ -179,18 +196,27 @@ function ApacheSetup () {
 
 } 
 
+function WarnMessage (){
+#Warn Message
 
+echo "######################################################"
+echo "THREAT PROTECTION FOR LINUX"
+echo "PLEASE,DO NOT INSTALL OVER PRODUCTIVE APACHE SERVERS"
+echo "INSTALL ONLY IN FRESH NEW SERVERS"
+echo "######################################################
+#warn
+}
 
 
 
 #
 #MAIN BODY
 
-
+ WarnMessage
 	PackagesNeed
-		#AddRepo
-		#	DownloadP
-			#	InstallRPM 
+		AddRepo
+			DownloadP
+				InstallRPM 
 					AddUser
 					GenerateKey
 					AddKeyProduct

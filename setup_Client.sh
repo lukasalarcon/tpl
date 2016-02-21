@@ -1,6 +1,9 @@
 #!/bin/bash
+# GNU GPL Software under the GPL may be run for all purposes, including commercial purposes and even as a tool for creating proprietary software.
+
+
 #DEBUG
-set -x
+#set -x
 #END DEBUG
 
 #GLOBAL VARS
@@ -227,7 +230,31 @@ fi
 # stop RemoteDeploy function
 }
 
+function PrepareAgent () {
+#start PrepareAgent
 
+#check if package exists 
+SAGENT=$(ls -LR tmpp/secondlook-agent*.tar.gz)
+
+if [ -f $SAGENT	 ]
+	then
+		echo "File Agent Found	[OK]"
+		sudo tar -xzf $SAGENT -C $_MYPLAYBOOK/
+	
+
+	else
+		echo "File Agent not found!"
+		
+fi
+
+
+
+
+
+
+
+#PrepareAgent function ends here
+}
 
 
 
@@ -237,6 +264,7 @@ fi
 		AddKey
 			CentOS7_AnsibleInstalation
 		CreateAnsiblePlaybook
+		PrepareAgent
 	SpecialAccounts
 StartRemoteDeploy
 

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -x
+# OPEN SOURCE CODE. Thanks to the community
+#set -x
 
 lowercase(){
     echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"

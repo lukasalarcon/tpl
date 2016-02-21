@@ -1,6 +1,8 @@
 #!/bin/bash
+# GNU GPL Software under the GPL may be run for all purposes, including commercial all purposes and even as a tool for creating proprietary software.
+
 #DEBUG
-set -x
+#set -x
 #
 
 #ADD CRONTAB ENTRIES FOR SECONDLOOK SCAN
