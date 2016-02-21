@@ -23,7 +23,7 @@ _apache=$(rpm -a httpd)
 _mysqlserver=$(rpm -a mariadb-server)
 _php=$(rpm -qa php)
 _phpsql=$(rpm -qa php-mysql)
-
+#YUM?
 
 #APACHE
 if [[ "$_apache" == "httpd"* ]]
@@ -100,3 +100,30 @@ sudo mysql_secure_installation
 
 
 }
+
+function DataBaseSetting () {
+
+
+#check file for DataBase Settings
+
+	if [ -f /etc/my.cnf ]
+		then
+			echo "Found MySQL/MAriaDB"
+			#CAPTURE TOTAL MEMORY
+			TOMEM=$(free | head -2|cut -c10-20 | tail -1)
+			
+			
+		else
+			echo "we cannot find MySQL/MariaDB"
+	fi
+
+
+
+
+
+
+
+
+}
+
+
