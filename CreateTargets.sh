@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# GNU GPL Software under the GPL may be run for all purposes, including commercial all purposes and even as a tool for creating proprietary software.
+
+
+
 #GLOBAL PARAM
 GLOBALTARGETS=""
 TARGET_FILE=/etc/secondlook/targets

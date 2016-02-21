@@ -1,7 +1,13 @@
+#!/bin/bash
+
+# GNU GPL Software under the GPL may be run for all purposes, including commercial purposes and even as a tool for creating proprietary software.
+
+
+
 ##INSTALL###
 
 #DEBUG SCRIPT
-set -x
+#set -x
 #
 
 #

@@ -1,6 +1,9 @@
 #!/bin/bash
 #set -x
 ############################                                                                                                                                                                                                                                             
+# OPEN SOURCE CODE. Thanks to the community.
+
+
 
 prefix_to_bit_netmask() {
     prefix=$1;
