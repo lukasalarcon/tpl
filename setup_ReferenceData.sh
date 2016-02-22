@@ -7,7 +7,7 @@ set -x
 
 #GLOBAL VARS
 #
-
+MYS=/etc/my.cnf
 #
 #END GLOBAL VARS
 
@@ -96,25 +96,49 @@ function DataBaseSetting () {
 
 #check file for DataBase Settings
 
-	if [ -f /etc/my.cnf ]
+	if [ -f $MYS  ]
 		then
 			echo "Found MySQL/MAriaDB"
 			#CAPTURE TOTAL MEMORY
 				TOMEM=$(free | head -2|cut -c10-20 | tail -1)
 					#CALCULATE 75%
 					PERC=$(( $TOMEM * 75 / 100))
+					#CONVERT TO GB
+					PERC=$(($PERC / 1024))					
 						#INSERT LINES FOR MEMORY MANAGEMENT
-							sed  '/\[mysqld\]/a max_allowed_packet = 16M'
-							sed  '/\[mysqld\]/a innodb_buffer_pool_size = ${PERC}G'
-							sed  '/\[mysqld\]/a innodb_file_per_table   = 1'
+							sed -i '/\[mysqld\]/a max_allowed_packet = 16M' $MYS
+							sed -i "/\[mysqld\]/a innodb_buffer_pool_size = ${PERC}G" $MYS
+							sed -i '/\[mysqld\]/a innodb_file_per_table   = 1' $MYS
 						#SYSTEM RESTART
 						sudo systemctl restart mariadb.service				
 			
 		else
-			echo "we cannot find MySQL/MariaDB"
+			echo "We cannot find MySQL/MariaDB"
 			exit 1
 	fi
 }
+
+
+function SqlScript () {
+
+_SCRIPTA="CREATE USER 'secondlook_ro'@'localhost'\
+	GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
+	GRANT SELECT ON `pagehash` . * TO 'secondlook_ro'@'localhost';"
+
+_SCRIPTB="CREATE USER 'secondlook_rw'@'localhost'\
+        GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
+        GRANT SELECT ON `pagehash` . * TO 'secondlook_rw'@'localhost'; WITH GRANT OPTION ;"
+
+
+mysql mydb -e $_SCRIPTA
+
+mysql mydb -e $_SCRIPTB
+
+}
+
+
+
+
 
 #MAIN
 

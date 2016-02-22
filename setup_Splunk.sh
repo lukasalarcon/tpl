@@ -75,15 +75,16 @@ fi
                 then
                         echo "Splunk Binary Detected"
                         $splbin start --accept-license
+			$splbin enable boot-start
+			#firewall rule for Splunk Package
+			sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
+
                 else
                         echo "Splunk Binary Not detected"
-                        $splbin enable boot-start
 
         fi
 
-#firewall rule for Splunk Package
 
-sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
 
 
 #function Parameters ends
