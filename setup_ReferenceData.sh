@@ -8,6 +8,7 @@ set -x
 #GLOBAL VARS
 #
 MYS=/etc/my.cnf
+PHPSC=$(ls -LR tmpp/secondlook-phpscripts*.tar.gz)
 #
 #END GLOBAL VARS
 
@@ -117,31 +118,53 @@ function DataBaseSetting () {
 			exit 1
 	fi
 }
-
+	
 
 function SqlScript () {
 
-_SCRIPTA="CREATE USER 'secondlook_ro'@'localhost'\
+
+_SCRIPTA="CREATE DATABASE pagehash"
+
+_SCRIPTB="CREATE USER 'secondlook_ro'@'localhost'\
 	GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
 	GRANT SELECT ON `pagehash` . * TO 'secondlook_ro'@'localhost';"
 
-_SCRIPTB="CREATE USER 'secondlook_rw'@'localhost'\
+_SCRIPTC="CREATE USER 'secondlook_rw'@'localhost'\
         GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
         GRANT SELECT ON `pagehash` . * TO 'secondlook_rw'@'localhost'; WITH GRANT OPTION ;"
 
+mysql -h "localhost" -u "root" -Bse "CREATE DATABASE pagehash"
 
-mysql mydb -e $_SCRIPTA
+mysql pagehash -e $_SCRIPTA
 
-mysql mydb -e $_SCRIPTB
+mysql pagehash -e $_SCRIPTB
+
+}
+
+function ScriptsPhp() {
+
+
+#VALIDATE PHPSCRIPTS 
+
+	if  [ ! -z $PHPSC ]
+		then
+			sudo tar xvf $PHPSC -C /
+			
+
+		else
+			echo "We cannot find scripts!!! Try again!"
+			exit 1	
+	fi	
+
+
 
 }
 
 
 
-
-
 #MAIN
 
-	CentOS7_Install 
-		StartServices
-		DataBaseSetting
+#	CentOS7_Install 
+#		StartServices
+	#	DataBaseSetting
+	SqlScript
