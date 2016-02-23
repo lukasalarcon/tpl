@@ -7,8 +7,10 @@ set -x
 
 #GLOBAL VARS
 #
+VERSION=
 MYS=/etc/my.cnf
 PHPSC=$(ls -LR tmpp/secondlook-phpscripts*.tar.gz)
+SECLOOK=/usr/share/secondlook/
 #
 #END GLOBAL VARS
 
@@ -122,22 +124,50 @@ function DataBaseSetting () {
 
 function SqlScript () {
 
+#START LOCAL SCRIPTS FOR REFERENCE LOOKSERVER
 
-_SCRIPTA="CREATE DATABASE pagehash"
 
-_SCRIPTB="CREATE USER 'secondlook_ro'@'localhost'\
-	GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
-	GRANT SELECT ON `pagehash` . * TO 'secondlook_ro'@'localhost';"
 
-_SCRIPTC="CREATE USER 'secondlook_rw'@'localhost'\
-        GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
-        GRANT SELECT ON `pagehash` . * TO 'secondlook_rw'@'localhost'; WITH GRANT OPTION ;"
+PASSWORD=
 
-mysql -h "localhost" -u "root" -Bse "CREATE DATABASE pagehash"
+	
 
-mysql pagehash -e $_SCRIPTA
+		echo "Please, enter the MARIADB/MYSQL password for database creation:"
 
-mysql pagehash -e $_SCRIPTB
+		read PASSWORD
+
+
+
+
+
+#_SCRIPTA="CREATE DATABASE pagehash"
+
+#_SCRIPTB="CREATE USER 'secondlook_ro'@'localhost'\
+#	GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
+#	GRANT SELECT ON `pagehash` . * TO 'secondlook_ro'@'localhost';"
+
+#_SCRIPTC="CREATE USER 'secondlook_rw'@'localhost'\
+#        GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
+#        GRANT SELECT ON `pagehash` . * TO 'secondlook_rw'@'localhost'; WITH GRANT OPTION ;"
+
+mysql -h "localhost" -u "root" -p$PASSWORD -Bse "CREATE DATABASE pagehash;"
+
+#visual for database creation
+PAGEH=$(mysql -h "localhost" -u "root" -p$PASSWORD  -Bse "show DATABASES;"| grep pagehash)
+
+	if [ ! -z $PAGEH ]
+		then
+			echo "DATABASE NOT CREATED"
+			exit 1
+		else
+			echo "DATABASE CREATED"
+	fi	
+
+
+
+#mysql pagehash -e $_SCRIPTB
+
+#mysql pagehash -e $_SCRIPTC
 
 }
 
@@ -150,6 +180,10 @@ function ScriptsPhp() {
 		then
 			sudo tar xvf $PHPSC -C /
 			
+			#CREATE SOFT LINKS
+			sudo ln -s /usr/share/secondlook/ph_query.php /var/www/ph_query.php
+			sudo ln -s /usr/share/secondlook/phdb_config.php /var/www/phdb_config.php
+			
 
 		else
 			echo "We cannot find scripts!!! Try again!"
@@ -160,6 +194,26 @@ function ScriptsPhp() {
 
 }
 
+function SecondLookDetection () {
+#Detects if it is a SecondLook Server
+
+
+	if [ -d SECLOOK ]
+		then
+
+			echo "TPL for LINUX detected. Reference Data server aborted. You need a FRESH NEW SERVER"
+
+		else
+
+			echo "FRESH NEW SERVER DETECTED"
+
+	fi 
+
+
+
+
+
+}
 
 
 #MAIN
