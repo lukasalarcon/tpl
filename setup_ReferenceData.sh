@@ -142,32 +142,58 @@ PASSWORD=
 
 #_SCRIPTA="CREATE DATABASE pagehash"
 
-#_SCRIPTB="CREATE USER 'secondlook_ro'@'localhost'\
-#	GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
-#	GRANT SELECT ON `pagehash` . * TO 'secondlook_ro'@'localhost';"
+_SCRIPTB="CREATE USER 'secondlook_ro'@'localhost';\
+ GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0;\
+ GRANT SELECT ON \`pagehash\`. * TO 'secondlook_ro'@'localhost';"
 
-#_SCRIPTC="CREATE USER 'secondlook_rw'@'localhost'\
-#        GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0\
-#        GRANT SELECT ON `pagehash` . * TO 'secondlook_rw'@'localhost'; WITH GRANT OPTION ;"
+_SCRIPTC="CREATE USER 'secondlook_rw'@'localhost';\
+ GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0;\
+ GRANT SELECT ON \`pagehash\` . * TO 'secondlook_rw'@'localhost' WITH GRANT OPTION ;"
 
-mysql -h "localhost" -u "root" -p$PASSWORD -Bse "CREATE DATABASE pagehash;"
+#mysql -h "localhost" -u "root" -p$PASSWORD -Bse "CREATE DATABASE pagehash;"
 
 #visual for database creation
 PAGEH=$(mysql -h "localhost" -u "root" -p$PASSWORD  -Bse "show DATABASES;"| grep pagehash)
 
-	if [ ! -z $PAGEH ]
+	if [ -z $PAGEH ]
 		then
 			echo "DATABASE NOT CREATED"
 			exit 1
 		else
 			echo "DATABASE CREATED"
+			
+			#START THE FIRST SCRIPT FOR SECONDLOOK
+
+				mysql -h localhost -u "root" -p$PASSWORD -Bse "$_SCRIPTB"
+
+			#CHECK FOR ERROR IN THE EXECUTION
+
+			if [ $? -eq 0 ]; then
+				echo "OK. SCRIPTB SUCCESSFULLY EXECUTED."
+				else
+				echo "FAILED. SCRIPTB NOT EXECUTED."
+				
+			fi
+
+			#START THE SECOND SCRIPT
+
+				mysql -h localhost -u "root" -p$PASSWORD -Bse "$_SCRIPTC"
+
+			
+			#CHECK FOR ERROR IN THE EXECUTION
+					
+			if [ $? -eq 0 ]; then
+                                echo "OK. SCRIPTC SUCCESSFULLY EXECUTED."
+                                else
+                                echo "FAILED. SCRIPTC NOT EXECUTED."
+
+                        fi
+
+
+
+
 	fi	
 
-
-
-#mysql pagehash -e $_SCRIPTB
-
-#mysql pagehash -e $_SCRIPTC
 
 }
 
@@ -178,6 +204,7 @@ function ScriptsPhp() {
 
 	if  [ ! -z $PHPSC ]
 		then
+			#UNTAR SOURCE CODE FROM TPL
 			sudo tar xvf $PHPSC -C /
 			
 			#CREATE SOFT LINKS
