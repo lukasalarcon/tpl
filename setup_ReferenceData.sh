@@ -24,6 +24,8 @@ _apache=$(rpm -qa httpd)
 _mysqlserver=$(rpm -qa mariadb-server)
 _php=$(rpm -qa php)
 _phpsql=$(rpm -qa php-mysql)
+_mariadbv=$(rpm -qa mariadb)
+_bc=$(rpm -qa bc)
 #YUM?
 
 #APACHE
@@ -38,7 +40,7 @@ if [[ "$_apache" == "httpd"* ]]
 fi
 
 
-#M DB
+#M DB SERVER 
 if [[ "$_mysqlserver" == "mariadb-server"* ]]
         then
                 echo "Package MARIADB SERVER              [OK]"
@@ -46,6 +48,19 @@ if [[ "$_mysqlserver" == "mariadb-server"* ]]
                 echo "Proceed to Install MARIADB SERVER"
                 sudo yum -y install mariadb-server
 fi
+
+
+
+
+#MARIA DB
+if [[ "$_mariadbv" == "mariadb"* ]]
+        then
+                echo "Package MARIADB DB              [OK]"
+        else
+                echo "Proceed to Install MARIADB DB"
+                sudo yum -y install mariadb
+fi
+
 
 
 #PHP
@@ -70,6 +85,22 @@ if [[ "$_phpsql" == "php-mysql"* ]]
 fi
 
 
+#BC for Calculations
+if [[ "$_bc" == "bc"* ]]
+        then
+                echo "Package BC                          [OK]"
+        else
+                echo "Proceed to Install Calculator"
+                sudo yum -y install bc
+
+
+fi
+
+
+
+
+
+
 #end setup function
 }
 
@@ -90,33 +121,58 @@ sudo systemctl start mariadb.service
 sudo systemctl start httpd.service
 
 #START MYSQL SERVICES
+# IT WILL LAUNCH A COSMETIC ERROR!!! A BUG FROM MARIADB
+echo "A cosmetic error. Keep going"
 sudo /usr/bin/mysql_secure_installation
 
 }
 
 function DataBaseSetting () {
+#Double check if my.cfg exists
+
+#WE EXPECT A MEDIUM LOAD SERVER
+_MEDCFG=/usr/share/mysql/my-medium.cnf
+
+if [ -f $MEDCFG ]
+	then
+		#WE ARE GOING TO COPY MEDIUM CONFIG TO FINAL CONFIG
+		cp $_MEDCFG $MYS
+	else
+		echo "Unfortunately we cannot find MariaDb setting file. We need to stop. Sorry."
+		exit 1	
+fi
 
 
-#check file for DataBase Settings
+#check file for DataBase Settings again
 
 	if [ -f $MYS  ]
 		then
 			echo "Found MySQL/MAriaDB"
 			#CAPTURE TOTAL MEMORY
-				TOMEM=$(free | head -2|cut -c10-20 | tail -1)
+				TOMEM=$(free -k | head -2|cut -c10-20 | tail -1)
 					#CALCULATE 75%
 					PERC=$(( $TOMEM * 75 / 100))
 					#CONVERT TO GB
-					PERC=$(($PERC / 1024))					
+					PERC=$(echo "scale=0; $PERC/1048576" | bc)					
+					#WE NEED TO ROUND THE VALUE DOWN FOR BASH ISSUES
+					PERC=${PERC%%.*}
+
+					#MIMIMUM MEMORY SERVER PROTECTION: IF A SERVER HAS LESS THAN 1 GB, SET 1 GB (BETA EDITION ISSUE)
+					if  [ "$PERC" -le "1" ]
+ 						then
+        						PERC=1
+					fi
+
+
 						#INSERT LINES FOR MEMORY MANAGEMENT
-							sed -i '/\[mysqld\]/a max_allowed_packet = 16M' $MYS
-							sed -i "/\[mysqld\]/a innodb_buffer_pool_size = ${PERC}G" $MYS
-							sed -i '/\[mysqld\]/a innodb_file_per_table   = 1' $MYS
+							sed -i '/\[mysqld\]/a max_allowed_packet =16M' $MYS
+							sed -i "/\[mysqld\]/a innodb_buffer_pool_size = ${PERC}G" $MYS
+							sed -i '/\[mysqld\]/a innodb_file_per_table = 1' $MYS
 						#SYSTEM RESTART
 						sudo systemctl restart mariadb.service				
 			
 		else
-			echo "We cannot find MySQL/MariaDB"
+			echo "We cannot find MySQL/MariaDB."
 			exit 1
 	fi
 }
@@ -139,17 +195,20 @@ PASSWORD=
 
 
 
-
+#CREATE DATABASE
 _SCRIPTA="CREATE DATABASE pagehash;"
 
+#CREATE READ ONLY USER
 _SCRIPTB="CREATE USER 'secondlook_ro'@'localhost';\
  GRANT USAGE ON * . * TO 'secondlook_ro'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0;\
  GRANT SELECT ON \`pagehash\`. * TO 'secondlook_ro'@'localhost';"
-
+#CREATE WRITE USER
 _SCRIPTC="CREATE USER 'secondlook_rw'@'localhost';\
  GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0;\
  GRANT SELECT ON \`pagehash\` . * TO 'secondlook_rw'@'localhost' WITH GRANT OPTION ;"
 
+
+#START THE DATABASE CREATION 
 mysql -h "localhost" -u "root" -p$PASSWORD -Bse "$_SCRIPTA"
 
 #visual for database creation
