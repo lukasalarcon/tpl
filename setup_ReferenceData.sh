@@ -11,6 +11,7 @@ VERSION=
 MYS=/etc/my.cnf
 PHPSC=$(ls -LR tmpp/secondlook-phpscripts*.tar.gz)
 SECLOOK=/usr/share/secondlook/
+APA=/etc/httpd/conf/httpd.conf
 #
 #END GLOBAL VARS
 
@@ -300,6 +301,60 @@ function SecondLookDetection () {
 
 
 }
+
+
+
+
+function ModifyApacheServer () {
+#MODIFY ROUTINES FOR APACHE REFERENCE 
+
+
+
+
+	if [ -f $APA ]
+		then
+
+
+		#USING SED FOR APPEND LINES FOR APACHE  
+		sed -i '/\/var\/www\/html/a \
+        		AuthType Basic \
+        		AuthName "Second Look Repository" \
+        		AuthUserFile \/etc\/httpd\/conf.d\/.htpasswd \
+        		Require valid-user' $APA
+		#CHANGE THE REQUIRED ALL ACCESS TO COMMENT
+		sed -i '/Require all granted/s/^/#/' $APA
+		#RESTART APACHE SERVER
+
+		sudo systemctl restart httpd.service
+	
+
+		#
+		sudo htpasswd -c /etc/httpd/conf.d/.htpasswd $MYKEY
+
+	
+		else
+		echo "We cannot find Apache config file"	
+	fi
+
+#END Modify Apache Server
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function SaveGuard () {
 #ONLY FOR URGENCY SITUATIONS
