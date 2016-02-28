@@ -212,7 +212,7 @@ _SCRIPTC="CREATE USER 'secondlook_rw'@'localhost';\
 #START THE DATABASE CREATION 
 mysql -h "localhost" -u "root" -p$PASSWORD -Bse "$_SCRIPTA"
 
-#visual for database creation
+#check for database creation
 PAGEH=$(mysql -h "localhost" -u "root" -p$PASSWORD  -Bse "show DATABASES;"| grep pagehash)
 
 	if [ -z $PAGEH ]
