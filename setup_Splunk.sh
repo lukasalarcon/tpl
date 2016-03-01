@@ -18,14 +18,14 @@ function GetSplunk () {
 
 echo "Choose the best method for getting the Splunk Package:"
 echo "1) From the disk"
-echo "2) From the cloud"
+echo "2) From the cloud (not functional yet)"
 echo "3) I will install by my own"
 read num
  
 case $num in
 
 	1) 
-		echo "Please, choose the path and package name where you custom splunk package is:"
+		echo "Please, choose the path and package name (RPM package) where you custom splunk package is:"
 		read splunkFol
 		if [ -f $splunkFol ]
 			then
@@ -65,7 +65,7 @@ function Parameters () {
 
 if [ "$myfolder" != ""	]
 	then
-		splbin=$(find /opt -name splunk -type f -perm -u+x)
+		splbin=$(find $myfolder -name splunk -type f -perm -u+x)
 	else
 		splbin=$(find /opt -name splunk -type f -perm -u+x)
 
@@ -75,15 +75,16 @@ fi
                 then
                         echo "Splunk Binary Detected"
                         $splbin start --accept-license
+			$splbin enable boot-start
+			#firewall rule for Splunk Package
+			sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
+
                 else
                         echo "Splunk Binary Not detected"
-                        $splbin enable boot-start
 
         fi
 
-#firewall rule for Splunk Package
 
-sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
 
 
 #function Parameters ends

@@ -7,6 +7,7 @@
 #END DEBUG
 
 #GLOBAL VARS
+VERSION=
 _SECONDLOOK=/usr/share/secondlook
 _MYKEY=
 HOMEUSER=/home/secondlook
@@ -99,7 +100,7 @@ fi
 cp $_SECONDLOOK/ansible/agent_deploy.yaml $_MYPLAYBOOK 
 
 #COPY KEYS TO MYPLAYBOOK
-cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK
+cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK/ssh_authorized_keys
 
 
 #CREATE A LIST FROM SL TARGETS
@@ -158,7 +159,7 @@ case $mysel in
 		echo "Enter the remote user:"
 		read RUSER
 		#ASSIGN THE USER TO VARIABLE
-		SCMO=" ansible_connection=ssh ansible_user=$RUSER"
+		SCMO=" ansible_connection=ssh ansible_ssh_user=$RUSER"
 		SCR=$(grep --only-matching --perl-regex "($MY_EXPRESS)" $_MYPLAYBOOK/hosts)
 		echo "We have match:"
 		echo $SCR | more
@@ -217,7 +218,7 @@ read yesno
 
 if [ "$yesno" == "y" -o "$yesno" == "Y" ]  
 	then
-		sudo ansible-playbook -k -K -i hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml
+		sudo ansible-playbook -k -K -i $_MYPLAYBOOK/hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml
 	else
 		echo "Deploy not needed"
 fi
