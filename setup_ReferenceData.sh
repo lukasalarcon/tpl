@@ -326,10 +326,16 @@ function ModifyApacheServer () {
 		#RESTART APACHE SERVER
 
 		sudo systemctl restart httpd.service
-	
+		
+		
 
-		#
-		sudo htpasswd -c /etc/httpd/conf.d/.htpasswd $MYKEY
+		#CREATES USER AND PASSWORD WITH THE SAME KEY
+		
+		echo "Please, enter the TPL/SecondLook Key:"
+
+		echo MYKEY
+
+		sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
 
 	
 		else

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #SCRIPT ONLY FOR DEVELOPER 
-
+#GLOBLA VAR
+VERSION=
 
 
 

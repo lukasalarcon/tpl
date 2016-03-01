@@ -65,7 +65,7 @@ function Parameters () {
 
 if [ "$myfolder" != ""	]
 	then
-		splbin=$(find /opt -name splunk -type f -perm -u+x)
+		splbin=$(find $myfolder -name splunk -type f -perm -u+x)
 	else
 		splbin=$(find /opt -name splunk -type f -perm -u+x)
 

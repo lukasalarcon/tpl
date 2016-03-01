@@ -2,6 +2,8 @@
 
 # OPEN SOURCE CODE. Thanks to the community
 #set -x
+#GLOBAL 
+VERSION=
 
 lowercase(){
     echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"

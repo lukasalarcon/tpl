@@ -1,8 +1,11 @@
 #!/bin/bash
 #set -x
 ############################                                                                                                                                                                                                                                             
+
 # OPEN SOURCE CODE. Thanks to the community.
 
+#GLOBAL VAR
+VERSION=
 
 
 prefix_to_bit_netmask() {

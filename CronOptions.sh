@@ -5,6 +5,10 @@
 #set -x
 #
 
+#GLOBAL VARS
+VERSION=
+
+
 #ADD CRONTAB ENTRIES FOR SECONDLOOK SCAN
 echo "Choose from the following scanning options:"
 echo "1)Each 5 minutes"

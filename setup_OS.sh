@@ -3,8 +3,10 @@
 
 
 #set -x
+#GLOBAL VAR
 
 SHOME="/root"
+VERSION=
 
 #INSTALL TLP PROCESS
 

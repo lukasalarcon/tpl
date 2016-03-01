@@ -12,6 +12,7 @@
 
 #
 ##GLOBAL VARIABLES
+VERSION=
 REPODROP=tmpp
 PACKAGE_FILENAME=secondlook-5.0.0_r56689-EL7.x86_64.rpm
 HOMEUSER=/home/secondlook
@@ -202,8 +203,9 @@ function WarnMessage (){
 echo "######################################################"
 echo "THREAT PROTECTION FOR LINUX"
 echo "PLEASE,DO NOT INSTALL OVER PRODUCTIVE APACHE SERVERS"
-echo "INSTALL ONLY IN FRESH NEW SERVERS"
-echo "######################################################
+echo "INSTALL ONLY IN FRESH NEW SERVERS. Press any key to continue"
+echo "######################################################"
+read o
 #warn
 }
 
