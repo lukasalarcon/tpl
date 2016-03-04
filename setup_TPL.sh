@@ -14,7 +14,7 @@
 ##GLOBAL VARIABLES
 VERSION=
 REPODROP=tmpp
-PACKAGE_FILENAME=secondlook-5.0.0_r56689-EL7.x86_64.rpm
+PACKAGE_FILENAME=
 HOMEUSER=/home/secondlook
 CRONITI=CronOptions.sh
 DWL=Get_Splunk.sh
