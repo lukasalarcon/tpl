@@ -14,10 +14,10 @@
 ##GLOBAL VARIABLES
 VERSION=
 REPODROP=tmpp
-PACKAGE_FILENAME=secondlook-5.0.0_r56689-EL7.x86_64.rpm
+PACKAGE_FILENAME=
 HOMEUSER=/home/secondlook
 CRONITI=CronOptions.sh
-DWL=Get_TPL.sh
+DWL=Get_Splunk.sh
 CREATETGS=CreateTargets.sh
 APACHESETUP=setup_Apache.sh
 # END GLOBAL VARIABLES ####
@@ -73,7 +73,7 @@ sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noa
 }
 
 function DownloadP () {
-#Download Sources from DropBox
+#Download Splunk Source from DropBox
 
 sh ./$DWL
 
@@ -88,8 +88,15 @@ sh ./$DWL
 
 function InstallRPM (){ 
 
-#INSTALL PACKAGE FOR CENTOS 
-sudo yum install $REPODROP/$PACKAGE_FILENAME
+#INSTALL PACKAGE FOR CENTOS MANUALLY
+#ASK FOR SOURCE CODE
+
+echo "For installing TPL, you will need the source:"
+echo "Please, ask to your Forcepoint Representative for Keys and Sources"
+echo "Please, enter the path for the TPL server (rpm) package:"
+read PACKAGE_FILENAME
+ 
+sudo yum install $PACKAGE_FILENAME
 
 }
 

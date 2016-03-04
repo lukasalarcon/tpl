@@ -9,7 +9,8 @@ set -x
 #
 VERSION=
 MYS=/etc/my.cnf
-PHPSC=$(ls -LR tmpp/secondlook-phpscripts*.tar.gz)
+#PHPSC=$(ls -LR tmpp/secondlook-phpscripts*.tar.gz)
+PHPSC=
 SECLOOK=/usr/share/secondlook/
 APA=/etc/httpd/conf/httpd.conf
 #
@@ -261,6 +262,10 @@ function ScriptsPhp() {
 
 
 #VALIDATE PHPSCRIPTS 
+echo "Please, enter the Reference Data Source:(/path/to/secondlook-phpscripts.tar.gz):"
+echo "If you dont have access, please consult your ForcePoint Representative"
+echo PHPSC
+
 
 	if  [ ! -z $PHPSC ]
 		then

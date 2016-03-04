@@ -17,11 +17,6 @@
 ./setup_Apache.sh
 
 
-#INSTALL ANSIBLE AND AGENT
-
-./setup_Client.sh
-
-
 #INSTALL SPLUNK
 
 ./setup_Splunk.sh
