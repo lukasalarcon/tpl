@@ -234,8 +234,12 @@ fi
 function PrepareAgent () {
 #start PrepareAgent
 
-#check if package exists 
-SAGENT=$(ls -LR tmpp/secondlook-agent*.tar.gz)
+#check if package exists
+
+echo "Please, enter the path and name of secondlook agent:(/path/to/second-agent.tar.gz)"
+read SAGENT
+ 
+#SAGENT=$(ls -LR tmpp/secondlook-agent*.tar.gz)
 
 if [ -f $SAGENT	 ]
 	then
@@ -244,7 +248,8 @@ if [ -f $SAGENT	 ]
 	
 
 	else
-		echo "File Agent not found!"
+		echo "File Agent not found! Exit"
+		exit 1
 		
 fi
 
