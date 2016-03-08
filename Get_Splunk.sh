@@ -32,8 +32,7 @@ function GetTheSource () {
 
 tmpp=tmpp;
 mkdir $tmpp;
-wget -O $tmpp/splunk.txt --content-disposition https://www.dropbox.com/s/i0ytkyd8t1awuky/splunk.txt -P tmpp
-
+wget -O $tmpp/splunk.txt --content-disposition https://www.dropbox.com/s/msjhp8esy4llnvl/splunk.txt -P tmpp
 
 for line in $(cat tmpp/splunk.txt); 
  do

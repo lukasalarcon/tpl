@@ -9,7 +9,7 @@
 #GLOBAL VARS
 SPLUNKPN=
 GLOXML=/usr/share/secondlook/splunk/dashboard.xml
-
+SPLUNKCLOUD=Get_Splunk.sh
 
 #END GLOBAL VARS
 
@@ -42,8 +42,10 @@ case $num in
 		;;
 
 	2)	echo "Calling cloud assistance for Splunk Package"
-
-
+			
+			./$SPLUNKCLOUD
+			#CALL THE INSTALLER
+			InstallSplunk
 		;;
 
 	3)	echo "Thanks!"

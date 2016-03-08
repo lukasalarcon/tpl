@@ -8,7 +8,7 @@ Verify Operating System
 #
 Check for several Packages
 #
-Call Cloud Packages from DropBox
+Call RPM and TGZ packages manually 
 #
 Create Crypto keys
 #
