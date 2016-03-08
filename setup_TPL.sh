@@ -91,12 +91,30 @@ function InstallRPM (){
 #INSTALL PACKAGE FOR CENTOS MANUALLY
 #ASK FOR SOURCE CODE
 
-echo "For installing TPL, you will need the source:"
-echo "Please, ask to your Forcepoint Representative for Keys and Sources"
-echo "Please, enter the path for the TPL server (rpm) package:"
-read PACKAGE_FILENAME
- 
-sudo yum install $PACKAGE_FILENAME
+
+
+	echo "For installing TPL, you will need the source:"
+	echo "Please, ask to your Forcepoint Representative for Keys and Sources"
+	echo "Please, enter the path for the TPL server (rpm) package:"
+	read PACKAGE_FILENAME
+	
+	if [ -f $PACKAGE_FILENAME ]
+		then
+			sudo yum install $PACKAGE_FILENAME
+		else
+		  	echo "We cannot find the package."
+			echo "Would you like to try again?(y/n)"
+			read GetA	
+				if [ "$GetA" == "Y" -o "$GetA" == "y" ] 
+					then
+						InstallRPM
+					else
+						echo "GoodBye.!"
+						exit 1
+				fi 
+			
+			
+	fi
 
 }
 
@@ -224,7 +242,7 @@ read o
  WarnMessage
 	PackagesNeed
 		AddRepo
-			DownloadP
+			
 				InstallRPM 
 					AddUser
 					GenerateKey

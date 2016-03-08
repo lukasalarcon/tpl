@@ -24,7 +24,7 @@ if [ -f $_SECONDLOOK/agent_ssh_authorized_keys ]
 	echo "Found agent_ssh_autorized_keys"
    else
 	echo "We cannot find ssh_authorized keys"
-	echo "Please, enter path to ssh_authorized_keys(/path/to/authorizedkeys"
+	echo "Please, enter path to ssh_authorized_keys(/path/to/authorizedkeys):"
         read PathKey
 	#EXIT IF CANNOT FIND
 	 if [ -f $Pathkey/agent_ssh_authorized_keys  ]
@@ -189,7 +189,7 @@ case $mysel in
 		echo "Please, enter the remote user for this host:"
 		read RUSER
 		#ADD VALUES TO HOSTS NOT PLAYBOOK!
-		SCM="ansible_connection=ssh ansible_user=$RUSER"
+		SCM="ansible_connection=ssh ansible_ssh_user=$RUSER"
 		
 		echo $SCM		
 		#REPLACE THE FIRST OCCURRENCE
@@ -223,7 +223,8 @@ if [ "$yesno" == "y" -o "$yesno" == "Y" ]
 		echo "Deploy not needed"
 fi
 
-
+#LEAVES A COPY OF SCRIPT FOR RUNNING IN CASE NEEDED
+echo  echo "sudo ansible-playbook -k -K -i $_MYPLAYBOOK/hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml" >>  $_MYPLAYBOOK/start_deploy.sh
 
 
 
@@ -238,8 +239,7 @@ function PrepareAgent () {
 
 echo "Please, enter the path and name of secondlook agent:(/path/to/second-agent.tar.gz)"
 read SAGENT
- 
-#SAGENT=$(ls -LR tmpp/secondlook-agent*.tar.gz)
+
 
 if [ -f $SAGENT	 ]
 	then
@@ -248,15 +248,19 @@ if [ -f $SAGENT	 ]
 	
 
 	else
-		echo "File Agent not found! Exit"
-		exit 1
-		
+			echo "We cannot find the package."
+                        echo "Would you like to try again?(y/n)"
+                        read GetA
+                                if [ "$GetA" == "Y" -o "$GetA" == "y" ]
+                                        then
+                                                PrepareAgent
+                                        else
+                                                        echo "GoodBye.!"
+							exit 1
+                                fi
+
+
 fi
-
-
-
-
-
 
 
 #PrepareAgent function ends here
