@@ -44,6 +44,7 @@ case $num in
 	2)	echo "Calling cloud assistance for Splunk Package"
 			
 			./$SPLUNKCLOUD
+			SPLUNKPN=$(find tmpp/ -name "splunk*.rpm")
 			#CALL THE INSTALLER
 			InstallSplunk
 		;;
@@ -205,7 +206,7 @@ IPSPLUNK=$(hostname -I)
 
 
 
-	echo "we have detected the following ip address: $IPSLUNK"
+	echo "we have detected the following ip address: $IPSPLUNK"
 	echo "Is this IP, the Splunk IP?(y/n)"
 	read yesno
 	if [ "$yesno" == "y" -o "$yesno" == "Y" ]
@@ -219,6 +220,7 @@ IPSPLUNK=$(hostname -I)
 	fi
 
 	#RESTART RSYSLOG FOR APPLYING CHANGES
+	echo "RESTART RSYSLOG FOR APPLYING CHANGES"
 	systemctl restart rsyslog
 	
 
