@@ -213,7 +213,7 @@ done
 function StartRemoteDeploy () {
 #start Start RemoteDeploy allows start Ansible Process
 
-echo "Would you like to start the remote deployment tasks?"
+echo "Would you like to start the remote deployment tasks?(y/n):"
 read yesno
 
 if [ "$yesno" == "y" -o "$yesno" == "Y" ]  
@@ -224,8 +224,11 @@ if [ "$yesno" == "y" -o "$yesno" == "Y" ]
 fi
 
 #LEAVES A COPY OF SCRIPT FOR RUNNING IN CASE NEEDED
-echo  echo "sudo ansible-playbook -k -K -i $_MYPLAYBOOK/hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml" >>  $_MYPLAYBOOK/start_deploy.sh
+echo "A copy of the ansible routine has been created at /etc/myplaybook"
+echo "run start_deploy.sh when you needed manually"
 
+echo "sudo ansible-playbook -k -K -i $_MYPLAYBOOK/hosts -e hosts=SL_targets $_MYPLAYBOOK/agent_deploy.yaml" >>  $_MYPLAYBOOK/start_deploy.sh
+chmod +x $_MYPLAYBOOK/start_deploy.sh
 
 
 

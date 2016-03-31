@@ -12,9 +12,9 @@
 ./setup_TPL.sh
 
 
-#INSTALL APACHE FOR TPL
+#INSTALL CLIENT BINARIES 
 
-./setup_Apache.sh
+./setup_Client.sh
 
 
 #INSTALL SPLUNK
