@@ -18,7 +18,7 @@ function GetSplunk () {
 
 echo "Choose the best method for getting the Splunk Package:"
 echo "1) From the disk"
-echo "2) From the cloud (not functional yet)"
+echo "2) From the cloud "
 echo "3) I will install by my own"
 read num
  
