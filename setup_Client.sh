@@ -100,7 +100,7 @@ fi
 cp $_SECONDLOOK/ansible/agent_deploy.yaml $_MYPLAYBOOK 
 
 #COPY KEYS TO MYPLAYBOOK
-cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK/ssh_authorized_keys
+cp $_SECONDLOOK/agent_ssh_authorized_keys $_MYPLAYBOOK/authorized_keys
 
 
 #CREATE A LIST FROM SL TARGETS
