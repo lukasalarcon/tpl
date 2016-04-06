@@ -21,4 +21,8 @@
 
 ./setup_Splunk.sh
 
+#REBOOT SERVER
+
+reboot
+
 
