@@ -20,6 +20,7 @@ CRONITI=CronOptions.sh
 DWL=Get_Splunk.sh
 CREATETGS=CreateTargets.sh
 APACHESETUP=setup_Apache.sh
+SCLOOK=secondlook
 # END GLOBAL VARIABLES ####
 
 function PackagesNeed () {
@@ -132,6 +133,10 @@ if [ -f $SCONFIG ]
 	then
 		#COPY KEYGEN KEY
 		cp $SCONFIG $HOMEUSER/.ssh/config
+		#REPOSITION VALUES TO SECONDLOOK USER
+		chown SCLOOK.SCLOOK id_rsa id_rsa.pub 
+
+		
 	else
 		echo "I cannot find $SCONFIG. Please, retry"
 		exit 1
