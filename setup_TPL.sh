@@ -134,7 +134,7 @@ if [ -f $SCONFIG ]
 		#COPY KEYGEN KEY
 		cp $SCONFIG $HOMEUSER/.ssh/config
 		#REPOSITION VALUES TO SECONDLOOK USER
-		chown SCLOOK.SCLOOK id_rsa id_rsa.pub 
+		chown $SCLOOK.$SCLOOK id_rsa id_rsa.pub 
 
 		
 	else
