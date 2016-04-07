@@ -5,7 +5,7 @@
 # OPEN SOURCE CODE. Thanks to the community.
 
 #GLOBAL VAR
-VERSION=
+VERSION=10
 
 
 prefix_to_bit_netmask() {

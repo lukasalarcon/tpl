@@ -5,6 +5,7 @@
 
 
 #GLOBAL PARAM
+VERSION=10
 GLOBALTARGETS=""
 TARGET_FILE=/etc/secondlook/targets
 CIDR_PROGRAM=CIDRtoIP.sh

@@ -7,6 +7,7 @@
 # END DEBUG
 
 #GLOBAL VARS
+VERSION=10
 SPLUNKPN=
 GLOXML=/usr/share/secondlook/splunk/dashboard.xml
 SPLUNKCLOUD=Get_Splunk.sh
