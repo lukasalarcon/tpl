@@ -6,7 +6,7 @@
 #
 
 #GLOBAL VARS
-VERSION=
+VERSION=10
 
 
 #ADD CRONTAB ENTRIES FOR SECONDLOOK SCAN
@@ -26,24 +26,24 @@ case "$cronOp" in
 	
 	1)
 	 #EACH 5 min		
-	 crontab -l > file; echo '5 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
+	 crontab -l > file; echo '*/5 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 	;;
 
 	2)
 	 #EACH 15 min
-	crontab -l > file; echo '15 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
+	crontab -l > file; echo '*/15 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 
 	;;
 	
 	3)
 	#EACH 30 minutes
-	crontab -l > file; echo '30 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
+	crontab -l > file; echo '0,30 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 
 	;;
 	
 	4)
 	#EACH 1 hour
-	crontab -l > file; echo '59 * * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
+	crontab -l > file; echo '0 */1 * * * /usr/bin/secondlook-scan' >> file; sudo crontab -u secondlook file
 
 	;;
 	
@@ -54,7 +54,7 @@ case "$cronOp" in
 	;;
 	
 	6)
-	#EACH day
+	#RANDOM SCAN
 	crontab -l > file; echo '59 23 * * * for target in `cat /etc/targets`; do echo "$((RANDOM \% 60)) $((RANDOM \% 24)) * * * secondlook-scan' >> file; sudo crontab -u secondlook file
 	
 	;;

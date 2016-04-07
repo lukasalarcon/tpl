@@ -2,6 +2,12 @@
 
 # GNU GPL Software under the GPL may be run for all purposes, including commercial purposes and even as a tool for creating proprietary software.
 
+#GLOBAL VAR
+VERSION=10
+
+
+
+
 wget -q --spider http://google.com
 
 if [ $? -eq 0 ]; then

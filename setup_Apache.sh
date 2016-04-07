@@ -7,6 +7,7 @@
 #
 
 ##GLOBAL VARs
+VERSION=10
 WSGI=/usr/share/secondlook/wsgi/slweb.conf
 APA=/etc/httpd/conf.d/
 CERTS=/etc/httpd/ssl

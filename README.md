@@ -1,6 +1,7 @@
 # tpl
 Threat Protection For Linux (CENTOS7 installer)
 Project needs to speed up the process of running a Threat Protection for Linux or SecondLook (Raytheon)
+VERSION=10
 
 Inicial Steps:
 #

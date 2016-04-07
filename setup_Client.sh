@@ -7,7 +7,7 @@
 #END DEBUG
 
 #GLOBAL VARS
-VERSION=
+VERSION=10
 _SECONDLOOK=/usr/share/secondlook
 _MYKEY=
 HOMEUSER=/home/secondlook
