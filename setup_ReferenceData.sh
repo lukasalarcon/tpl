@@ -260,14 +260,16 @@ PAGEH=$(mysql -h "localhost" -u "root" -p$PASSWORD  -Bse "show DATABASES;"| grep
 
 function ScriptsPhp() {
 
-while [ $YESNO == "n" || $YESNO == "N" ]
+YESNO=n
+
+while [ "$YESNO" == "n" ] || [ "$YESNO" == "N" ]
 do  
    #VALIDATE PHPSCRIPTS 
    echo "Please, enter the Reference Data Source:(/path/to/secondlook-phpscripts.tar.gz):"
    echo "If you dont have access, please consult your ForcePoint Representative"
    read PHPSC
 
-   echo "Is $PHPSC file correct?(y/n)?
+   echo "Is $PHPSC file correct?(y/n)?"
    read YESNO
 done
 
@@ -290,7 +292,7 @@ done
 			fi
 
 			
-                        if [ -f /usr/share/secondlook/ph_query.php && -f /usr/share/secondlook/phdb_config.php ]
+                        if [ -f /usr/share/secondlook/ph_query.php ]  && [ -f /usr/share/secondlook/phdb_config.php ]
 			 then
 			  #CREATE SOFT LINKS
 			  sudo ln -s /usr/share/secondlook/ph_query.php /var/www/ph_query.php
@@ -354,31 +356,40 @@ function ModifyApacheServer () {
 		#CHANGE THE REQUIRED ALL ACCESS TO COMMENT
 		sed -i '/Require all granted/s/^/#/' $APA
 		#RESTART APACHE SERVER
-
+		sudo systemctl stop httpd.service
+		sudo systemctl start httpd.service
 	        #RECONFIG APACHE CONF FILE?
-
-
-		if [ -f /usr/sbin/a2enconf ]
-		 then
-			sudo /usr/sbin/a2enconf sl-auth	
-			#RESTART APACHE SERVER
-			sudo systemctl restart httpd.service
-		 else
-		 echo "We cannot find a2enconf. Program Aborted."
-		 exit 1
-		fi
-		
+#ONLY UBUNTU
+#		if [ -f /usr/sbin/a2enconf ]
+#		 then
+#			sudo /usr/sbin/a2enconf sl-auth	
+#			#RESTART APACHE SERVER
+#			sudo systemctl stop httpd.service
+			sudo systemctl start httpd.service	
+#		 else
+#		 echo "We cannot find a2enconf. Program Aborted."
+#		 exit 1
+#		fi
+#END ONLY UBUNTU		
 
 		#CREATES USER AND PASSWORD WITH THE SAME KEY
 		
-		echo "Please, enter the TPL/SecondLook Key:"
 
-		echo MYKEY
+		while [ "$YESNO" == "n" ] && ["$YESNO" == "N" ] && [ "$MYKEY" == "" ]
+			do
+				echo "Please, enter the TPL/SecondLook Key:"
 
-		sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
+				read MYKEY
 
-	
-		else
+				if [ $MYKEY !="" ]
+					then
+					#USES KEY AS USER AND KEY AS PASS	
+					sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
+					echo "Apache password set."
+				fi
+	        done
+
+	else
 		echo "We cannot find Apache config file"
 		exit 1	
 	fi
@@ -419,10 +430,10 @@ echo ""
 
 #MAIN
 
-	CentOS7_Install 
-		SecondLookDetection
-			StartServices
-		          DataBaseSetting
-	                 SqlScript
+	#CentOS7_Install 
+	#	SecondLookDetection
+	#		StartServices
+	#	          DataBaseSetting
+	 #                SqlScript
 	        ScriptsPhp
 	 ModifyApacheServer
