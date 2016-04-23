@@ -272,13 +272,28 @@ echo PHPSC
 			#UNTAR SOURCE CODE FROM TPL
 			sudo tar xvf $PHPSC -C /
 			
-			#CREATE SOFT LINKS
-			sudo ln -s /usr/share/secondlook/ph_query.php /var/www/ph_query.php
-			sudo ln -s /usr/share/secondlook/phdb_config.php /var/www/phdb_config.php
+
+			#CHECK IF VAR/WWW EXISTS	
+			if [ ! -d /var/www ]; then
+  			# Control will enter here if /var/www doesn't exist.
+			echo "Folder /var/www doesn't exist. Please, install Apache!!"
+			exit 1				
+			fi
+
 			
+                        if [ -f /usr/share/secondlook/ph_query.php && -f /usr/share/secondlook/phdb_config.php ]
+			 then
+			  #CREATE SOFT LINKS
+			  sudo ln -s /usr/share/secondlook/ph_query.php /var/www/ph_query.php
+			  sudo ln -s /usr/share/secondlook/phdb_config.php /var/www/phdb_config.php
+			
+			 else
+			  echo "We cannot find secondlook scripts for Reference Data!!"
+			  exit 1		
+			fi
 
 		else
-			echo "We cannot find scripts!!! Try again!"
+			echo "We cannot find secondlook scripts!!! Try again!"
 			exit 1	
 	fi	
 
@@ -294,6 +309,7 @@ function SecondLookDetection () {
 		then
 
 			echo "TPL for LINUX detected. Reference Data server aborted. You need a FRESH NEW SERVER"
+			exit 1
 
 		else
 
@@ -330,8 +346,18 @@ function ModifyApacheServer () {
 		sed -i '/Require all granted/s/^/#/' $APA
 		#RESTART APACHE SERVER
 
-		sudo systemctl restart httpd.service
-		
+	        #RECONFIG APACHE CONF FILE?
+
+
+		if [ -f /usr/sbin/a2enconf ]
+		 then
+			sudo /usr/sbin/a2enconf sl-auth	
+			#RESTART APACHE SERVER
+			sudo systemctl restart httpd.service
+		 else
+		 echo "We cannot find a2enconf. Program Aborted."
+		 exit 1
+		fi
 		
 
 		#CREATES USER AND PASSWORD WITH THE SAME KEY
@@ -344,7 +370,8 @@ function ModifyApacheServer () {
 
 	
 		else
-		echo "We cannot find Apache config file"	
+		echo "We cannot find Apache config file"
+		exit 1	
 	fi
 
 #END Modify Apache Server
@@ -386,5 +413,7 @@ echo ""
 	CentOS7_Install 
 		SecondLookDetection
 			StartServices
-		DataBaseSetting
-	SqlScript
+		          DataBaseSetting
+	                 SqlScript
+	        ScriptsPhp
+	 ModifyApacheServer
