@@ -260,11 +260,20 @@ PAGEH=$(mysql -h "localhost" -u "root" -p$PASSWORD  -Bse "show DATABASES;"| grep
 
 function ScriptsPhp() {
 
+while [ $YESNO == "n" || $YESNO == "N" ]
+do  
+   #VALIDATE PHPSCRIPTS 
+   echo "Please, enter the Reference Data Source:(/path/to/secondlook-phpscripts.tar.gz):"
+   echo "If you dont have access, please consult your ForcePoint Representative"
+   read PHPSC
 
-#VALIDATE PHPSCRIPTS 
-echo "Please, enter the Reference Data Source:(/path/to/secondlook-phpscripts.tar.gz):"
-echo "If you dont have access, please consult your ForcePoint Representative"
-echo PHPSC
+   echo "Is $PHPSC file correct?(y/n)?
+   read YESNO
+done
+
+
+
+
 
 
 	if  [ ! -z $PHPSC ]
