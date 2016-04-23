@@ -1,9 +1,10 @@
 #!/bin/bash
-set -x
+#set -x
 
 #GLOBAL VARS
-VERSION=10
-HFILE=/etc/secondlook/targets
+VERSION=11
+HFILE=/etc/myplaybook/hosts
+_TMPHFILE=/etc/myplaybook/hosts.tmp
 CMD=`ping -q -c 1 ` 
 
 #################################################
@@ -36,6 +37,16 @@ CMD=`ping -q -c 1 `
 ##################################################
 #DO A LOOP IN THE TARGET FILE
 
+	
+	#REMOVE TMP FILE BEFORE ANY EXECUTION
+
+	rm -f $_TMPHFILE
+
+
+	#EXTRACT IPV4 FROM ANSIBLE TARGET TO A TEMP FILE
+	grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' $HFILE >> $_TMPHFILE 
+
+
 	while read target
 	do
     		echo "$target"
@@ -52,7 +63,7 @@ CMD=`ping -q -c 1 `
 		fi
  	
 
-	done < $HFILE
+	done < $_TMPHFILE
 
 
   
