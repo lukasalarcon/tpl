@@ -373,15 +373,15 @@ function ModifyApacheServer () {
 #END ONLY UBUNTU		
 
 		#CREATES USER AND PASSWORD WITH THE SAME KEY
-		
+YESNO="n"		
 
-		while [ "$YESNO" == "n" ] && ["$YESNO" == "N" ] && [ "$MYKEY" == "" ]
+		while [ "$YESNO" == "n" ] || ["$YESNO" == "N" ] || [ "$MYKEY" == "" ]
 			do
 				echo "Please, enter the TPL/SecondLook Key:"
 
 				read MYKEY
 
-				if [ $MYKEY !="" ]
+				if [ "$MYKEY" != "" ]
 					then
 					#USES KEY AS USER AND KEY AS PASS	
 					sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
