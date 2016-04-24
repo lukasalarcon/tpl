@@ -348,7 +348,7 @@ function ModifyApacheServer () {
 
 
 		#USING SED FOR APPEND LINES FOR APACHE  
-		sed -i 'Directory /\/var\/www\/html/a \
+		sed -i '/<Directory "\/var\/www\/html">/a \
         		AuthType Basic \
         		AuthName "Second Look Repository" \
         		AuthUserFile \/etc\/httpd\/conf.d\/.htpasswd \
