@@ -295,8 +295,8 @@ done
                         if [ -f /usr/share/secondlook/ph_query.php ]  && [ -f /usr/share/secondlook/phdb_config.php ]
 			 then
 			  #CREATE SOFT LINKS
-			  sudo ln -s /usr/share/secondlook/ph_query.php /var/www/ph_query.php
-			  sudo ln -s /usr/share/secondlook/phdb_config.php /var/www/phdb_config.php
+			  sudo ln -s /usr/share/secondlook/ph_query.php /var/www/html/ph_query.php
+			  sudo ln -s /usr/share/secondlook/phdb_config.php /var/www/html/phdb_config.php
 			
 			 else
 			  echo "We cannot find secondlook scripts for Reference Data!!"
