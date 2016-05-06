@@ -207,7 +207,7 @@ _SCRIPTB="CREATE USER 'secondlook_ro'@'localhost';\
 #CREATE WRITE USER
 _SCRIPTC="CREATE USER 'secondlook_rw'@'localhost';\
  GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0;\
- GRANT SELECT ON \`pagehash\` . * TO 'secondlook_rw'@'localhost' WITH GRANT OPTION ;"
+ GRANT ALL PRIVILEGESº ON \`pagehash\` . * TO 'secondlook_rw'@'localhost' WITH GRANT OPTION ;"
 
 
 #START THE DATABASE CREATION 
