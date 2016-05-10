@@ -488,8 +488,11 @@ echo ""
 
 	CentOS7_Install 
 		SecondLookDetection
-			StartServices
-		          DataBaseSetting
-	                 SqlScript
-	        ScriptsPhp
-	 ModifyApacheServer
+				StartServices
+		          		DataBaseSetting
+	                 	SqlScript
+	        	ScriptsPhp
+		 ModifyApacheServer
+		GetPython
+	DownGradePython
+
