@@ -390,7 +390,7 @@ YESNO="n"
 				echo "Is the Key OK?(y/n)"
 
 
-				if [ "$YESNO" == "y" || "$YESNO" == "Y" ]
+				if [ "$YESNO" == "y" ] || [ "$YESNO" == "Y" ]
                                         then
                                         echo "Continue..."
 
@@ -411,6 +411,7 @@ YESNO="n"
 					#USES KEY AS USER AND KEY AS PASS	
 					sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
 					echo "Apache password set."
+					break
 				fi
 						
 
