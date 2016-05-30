@@ -383,18 +383,34 @@ YESNO="n"
 				echo "Please, enter the TPL/SecondLook Key:"
 
 				read MYKEY
+				
+				
+
+
+				echo "Is the Key OK?(y/n)"
+
+
+				if [ "$YESNO" == "y" || "$YESNO" == "Y" ]
+                                        then
+                                        echo "Continue..."
+
+					else
+						#SECOND CHANCE	
+						echo "Please, enter again the TPL/SecondLook Key:"
+
+                                	read MYKEY
+                                fi
+
+
+
+
+
 
 				if [ "$MYKEY" != "" ]
 					then
 					#USES KEY AS USER AND KEY AS PASS	
 					sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
 					echo "Apache password set."
-				fi
-				echo "Is the Key OK?(y/n)"
-				read  YESNO
-				if [ "$YESNO" == "y" || "$YESNO" == "Y" ] 
-					then
-					echo "Reference Data ready"
 				fi
 						
 
@@ -429,7 +445,7 @@ _lpylib=python-libs-2.7.5-16.el7.x86_64.rpm
 	if [ -f $_tmpp/$_lpy ] && [ -f $_tmpp/$_lpylib ]
  		then 
 		#downgrade python to 2.7.5-16	
-		yum downgrade $_tmpp/$_lpy $_tmpp/_lpylib 
+		yum downgrade $_tmpp/$_lpy $_tmpp/$_lpylib 
 		#waiting for the finals results	
 		if [ $? -ne 0 ]
 			then
