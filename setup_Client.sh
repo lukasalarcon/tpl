@@ -143,7 +143,7 @@ while [ "$mysel" != 3 ]; do
 
 echo "Please, choose the following options:"
 echo "1) Batch Processing \
-         Summary: It will allow a batch procesisn for a range by \
+         Summary: It will allow a batch procesing for a range by \
 	  adding the same account to the regex you need"
 echo "2) Single Processing \
 	  Summary: It will allow single value to be modified"

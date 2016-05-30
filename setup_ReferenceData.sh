@@ -13,6 +13,7 @@ MYS=/etc/my.cnf
 PHPSC=
 SECLOOK=/usr/share/secondlook/
 APA=/etc/httpd/conf/httpd.conf
+GETPYTHON=Get_Python.sh
 #
 #END GLOBAL VARS
 
@@ -207,7 +208,9 @@ _SCRIPTB="CREATE USER 'secondlook_ro'@'localhost';\
 #CREATE WRITE USER
 _SCRIPTC="CREATE USER 'secondlook_rw'@'localhost';\
  GRANT USAGE ON * . * TO 'secondlook_rw'@'localhost' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0;\
- GRANT SELECT ON \`pagehash\` . * TO 'secondlook_rw'@'localhost' WITH GRANT OPTION ;"
+ GRANT ALL PRIVILEGES ON \`pagehash\` . * TO 'secondlook_rw'@'localhost' WITH GRANT OPTION ;"
+
+
 
 
 #START THE DATABASE CREATION 
@@ -387,6 +390,14 @@ YESNO="n"
 					sudo htpasswd -bc /etc/httpd/conf.d/.htpasswd $MYKEY $MYKEY
 					echo "Apache password set."
 				fi
+				echo "Is the Key OK?(y/n)"
+				read  YESNO
+				if [ "$YESNO" == "y" || "$YESNO" == "Y" ] 
+					then
+					echo "Reference Data ready"
+				fi
+						
+
 	        done
 
 	else
@@ -398,8 +409,53 @@ YESNO="n"
 }
 
 
+function Get_Python(){
+#Get Python Binaries that works with Reference Data Server
+
+	./$GETPYTHON
 
 
+#End Function Get_Python
+}
+
+function DownGradePython(){
+# Reference Data will not work the newest Python versions
+
+_tmpp=tmpp
+_lpy=python-2.7.5-16.el7.x86_64.rpm
+_lpylib=python-libs-2.7.5-16.el7.x86_64.rpm
+
+
+	if [ -f $_tmpp/$_lpy ] && [ -f $_tmpp/$_lpylib ]
+ 		then 
+		#downgrade python to 2.7.5-16	
+		yum downgrade $_tmpp/$_lpy $_tmpp/_lpylib 
+		#waiting for the finals results	
+		if [ $? -ne 0 ]
+			then
+    				echo "Downgrade has failed!... Exit now"
+				exit 1
+				
+			else
+    				echo "Downgrade has been sucessfull.!!!"
+			fi
+
+
+
+		else
+		echo "We cannot find python files for downgrading... Exit now"
+		exit 1
+	fi
+
+
+
+
+
+
+
+
+
+}
 
 
 
@@ -430,10 +486,13 @@ echo ""
 
 #MAIN
 
-	#CentOS7_Install 
-	#	SecondLookDetection
-	#		StartServices
-	#	          DataBaseSetting
-	 #                SqlScript
-	        ScriptsPhp
-	 ModifyApacheServer
+	CentOS7_Install 
+		SecondLookDetection
+				StartServices
+		          		DataBaseSetting
+	                 	SqlScript
+	        	ScriptsPhp
+		 ModifyApacheServer
+		GetPython
+	DownGradePython
+
