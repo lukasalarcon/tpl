@@ -142,8 +142,10 @@ function CreateRepo(){
                         echo "Please, execute again"
                         exit 1
                  fi
-	
-
+		
+		Â#KEEP LOCAL REPO	
+		localrepori=$localrepo	
+		
 
 		fi 	
 		
@@ -174,7 +176,7 @@ function InsertHashes(){
 
 	if [ -z "$se_look_ph" ]
 	 then
-		echo "We cannot find secondlook-phgen file"
+		echo "We cannot find secondlook-phgen file. Execute Again..."
 		UmountDrives
 		exit 1	
 	fi 
@@ -185,7 +187,7 @@ function InsertHashes(){
 
 			echo "Please, choose the Executables/ELF/Scripts:"
 			#ACCEPT SOME SPECIFIC FOLDER				
-			echo "Do you want search in a specific folder inside the repo?(y/n)"	
+			echo "Do you want search in a specific folder inside the repo?(y/n):"	
 			read yesno
 
 			if [ $yesno == "y" ] || [ $yesno == "Y" ]
@@ -196,11 +198,10 @@ function InsertHashes(){
 				echo "Enter the folder:"
 					#READ FOLDER INFO	
 					read myfolder
-					#KEEP LOCAL REPO
-					localrepori=$localrepo
+
 					#ONE VAR FOR LOCAL REPO AND FOLDER	
 					localrepo=$localrepo/$remoteserver$myfolder	
-					
+			fi		
 					echo "Working with $localrepo"
 					echo "Choose the options:"
 					echo "1) ELF Searcher"
@@ -222,7 +223,7 @@ function InsertHashes(){
 							;;
 					esac
 
-			fi
+			
 			
 			if [ -z "$searcher" ]
 			 then
