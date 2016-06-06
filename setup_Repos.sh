@@ -122,8 +122,10 @@ function CreateRepo(){
 	if [  -d $localrepo/$remoteserver ]
 	then 
 	   #EP LOCAL REPO
-           localrepori=$localrepo
+
 	   mkdir $localrepo/$remoteserver
+	   localrepori=$localrepo/$remoteserver
+
 	   sshfs $userremo@$remoteserver:/ $localrepo/$remoteserver	
 	else
 		echo "We cannot mount on folder it does not exist"
@@ -272,8 +274,8 @@ function UmountDrives(){
 
 
 #Unmount the drives with lazy option kernerl 2.4 as minimum
-
-umount -l $localrepori/$remoteserver 
+echo "Unmounting Remote Drives.."
+umount -l $localrepori 
 
 
 
