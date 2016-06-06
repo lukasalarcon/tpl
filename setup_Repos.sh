@@ -121,6 +121,8 @@ function CreateRepo(){
 
 	if [  -d $localrepo/$remoteserver ]
 	then 
+	   #EP LOCAL REPO
+           localrepori=$localrepo
 	   mkdir $localrepo/$remoteserver
 	   sshfs $userremo@$remoteserver:/ $localrepo/$remoteserver	
 	else
@@ -143,8 +145,6 @@ function CreateRepo(){
                         exit 1
                  fi
 		
-		Â#KEEP LOCAL REPO	
-		localrepori=$localrepo	
 		
 
 		fi 	
