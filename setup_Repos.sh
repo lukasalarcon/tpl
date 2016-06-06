@@ -273,7 +273,7 @@ function UmountDrives(){
 
 #Unmount the drives with lazy option kernerl 2.4 as minimum
 
-umount -l $localrepori 
+umount -l $localrepori/$remoteserver 
 
 
 
