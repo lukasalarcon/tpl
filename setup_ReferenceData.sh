@@ -7,7 +7,7 @@
 
 #GLOBAL VARS
 #
-VERSION=9
+VERSION=10
 MYS=/etc/my.cnf
 #PHPSC=$(ls -LR tmpp/secondlook-phpscripts*.tar.gz)
 PHPSC=
