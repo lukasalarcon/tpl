@@ -9,6 +9,7 @@
 #GLOBAL VARS
 VERSION=10
 SPLUNKPN=
+#OLD location. This has been deprecated
 GLOXML=/usr/share/secondlook/splunk/dashboard.xml
 SPLUNKCLOUD=Get_Splunk.sh
 
@@ -164,7 +165,12 @@ function CreateInputs () {
 
   $splbin add udp 514 -sourcetype syslog -auth admin:changeme
 
-#PASSWORD
+#Ends CreateInputs
+
+
+}
+
+function OldDashBoard () {
 
 if [ -f $GLOXML ]
 	then
@@ -189,15 +195,24 @@ if [ -f $GLOXML ]
 fi
 
 
+
 #RESTART SERVICES FOR GET THE DASHBOARD READY
 $splbin stop
 $splbin start 
 
-
-
-
-#Ends CreateInputs
 }
+
+
+function NewDash () {
+
+
+./setup_DashBoardSplunk.sh
+
+
+
+
+}
+
 
 
 function ModifyLogLinux () {

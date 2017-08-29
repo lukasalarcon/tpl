@@ -59,7 +59,7 @@ Script will setup full operating system. Under developement for Centos7
 
 setup_TPL.sh
 
-Script will setup Threat Protection for Linux from Cloud
+Script will setup Threat Protection for Linux 
 
 #########################################################################
 
@@ -81,3 +81,7 @@ setup_ReferenceData.sh
 
 Script will install a Reference Data Server for TPL. A reference data must be a
 separated Server. Script will not install if detects a TPL server running on the same server
+
+setup_DashBoardSplunk.sh
+
+Script will install the newest DashBoard Package for Splunk via command line.
