@@ -3,7 +3,7 @@
 
 
 #DEBUG
-#set -x
+set -x
 #END DEBUG
 
 #GLOBAL VARS
@@ -212,7 +212,7 @@ done
 
 function StartRemoteDeploy () {
 #start Start RemoteDeploy allows start Ansible Process
-
+echo "We suggest start the remote deploy after setting all product features..."
 echo "Would you like to start the remote deployment tasks?(y/n):"
 read yesno
 
@@ -247,7 +247,13 @@ read SAGENT
 if [ -f $SAGENT	 ]
 	then
 		echo "File Agent Found	[OK]"
-		sudo tar -xzf $SAGENT -C $_MYPLAYBOOK/
+	#Check Compability for version agent 1.6		
+		if [[ $SAGENT == *.tar ]]
+			then 
+				sudo tar -xvf $SAGENT -C $_MYPLAYBOOK/
+			else
+				sudo tar -xzf $SAGENT -C $_MYPLAYBOOK/
+		fi
 	
 
 	else
